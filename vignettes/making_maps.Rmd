@@ -481,7 +481,7 @@ See use [{leaflet} package](../html/kaz_adm2_sf.html#leaflet) for draw of Intera
 
 #### Interactive map of Kazakhstan with Region hyperlinks
 
-You can create Interactive Maps with hyperlinks to Wikipedia articles about Kazakhstani Regions.
+You can create Interactive Maps with hyperlinks to Wikipedia articles about Kazakhstani Regions. Basemap can be varied from a list of [providers](https://leaflet-extras.github.io/leaflet-providers/preview/).
 
 ```{r CNT1 leaflet, fig.height=4, fig.width=7 }
   library(leaflet)
