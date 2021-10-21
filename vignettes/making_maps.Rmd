@@ -481,4 +481,37 @@ See use [{leaflet} package](../html/kaz_adm2_sf.html#leaflet) for draw of Intera
 
 #### Interactive map of Kazakhstan with Region hyperlinks
 
-See use [{leaflet} package](../html/kaz_cnt1_sf.html#leaflet) for draw of Interactive Maps with hyperlinks as `sf` objects.
+You can create Interactive Maps with hyperlinks to Wikipedia articles about Kazakhstani Regions.
+
+```{r CNT1 leaflet, fig.height=4, fig.width=7 }
+  library(leaflet)
+  library(magrittr)
+
+  urls <-
+    c("Akmola_Region", "Aktobe_Region", "Almaty_Region", "Atyrau_Region", "West_Kazakhstan_Region",
+      "Jambyl_Region" , "Karaganda_Region", "Kostanay_Region", "Kyzylorda_Region",
+      "Mangystau_Region", "Pavlodar_Region", "North_Kazakhstan_Region", "Turkistan_Region",
+      "East_Kazakhstan_Region", "Nur-Sultan", "Almaty", "Shymkent")
+
+  leaflet::leaflet() %>%
+    leaflet::addProviderTiles(provider = "Esri.WorldPhysical") %>%
+    leaflet::addPolygons(
+      data = sf::st_zm(geokz::kaz_adm1_sf, geometry),
+      weight = 1,
+      color = "darkred",
+      fillColor = "coral",
+      fillOpacity = 0.3,
+      smoothFactor = 0.5,
+      popup = ~paste0("Region: ", '<a href = "https://en.wikipedia.org/wiki/', urls, '"> ',
+                      ADM1_EN, "</a><br>", "KATO: ", KATO, "<br>", "ISO 3166-2: ", ISO_3166_2),
+      label = ~paste(ADM1_EN, ":", ADM1_PCODE),
+      labelOptions = labelOptions(direction = "auto")
+    ) %>%
+    leaflet::addCircleMarkers(
+      data = geokz::kaz_cnt1_sf,
+      color = "brown",
+      radius = 3,
+      label = ~paste0("Center of ", ADM1_EN,": ", NAME_EN)
+    )
+
+```
