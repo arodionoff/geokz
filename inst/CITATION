@@ -1,0 +1,17 @@
+citHeader("To cite the 'mapSpain' package in publications use:")
+
+year = format(Sys.time(), "%Y")
+vers = paste('R package version', meta$Version)
+url = 'https://github.com/arodionoff/geokz/'
+citEntry(
+  ,
+  entry = 'manual',
+  title = paste('geokz:', meta$Title),
+  author = person(given = "Alexander",
+                  family = "Rodionov"),
+  year = year,
+  note = vers,
+  url = url,
+  # doi = '10.5281/zenodo.5366622',
+  textVersion = paste0('Rodionov, A. (', year, '). geokz: ', meta$Title, ' R package. ', 'https://github.com/arodionoff/geokz/')
+)

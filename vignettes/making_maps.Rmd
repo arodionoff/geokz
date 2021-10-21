@@ -1,0 +1,484 @@
+---
+title: "Making maps using `geokz`-package"
+author: "Alexander Rodionov"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Making maps using `geokz`-package}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(geokz)
+```
+
+**`geokz`-package provides access to multiple dataset of different types and for different use. In this vignette we introduce the different datas and explain their use cases. Vignette *Making maps using {geokz}-package* provides multiple real-world examples of their usage.**
+
+## Package installation {#package_installation}
+
+`geokz` can be installed from CRAN using
+
+```{r, eval = FALSE}
+# install from CRAN
+install.packages("geokz")
+
+# Install development version from GitHub
+remotes::install_github("arodionoff/geokz")
+```
+
+## Administrative units level 1 keys
+
+Kazakhstan is divided into 14 regions (Kazakh: облыстар/oblystar; singular: облыс/oblys; Russian: области/oblasti; singular: область/oblast' ), the Capital - [Nur-Sultan](http://www.akorda.kz/ru/legal_acts/decrees/o-pereimenovanii-goroda-astany-stolicy-respubliki-kazahstan-v-gorod-nur-sultan-stolicu-respubliki-kazahstan) (formerly Astana) and 3 Cities of Republican Significance (Almaty, Shymkent and also Baikonyr, near is the World's First spaceport).
+
+```{r kaz_adm1_sf}
+library(geokz)
+library(dplyr)
+library(sf)
+
+IQR <- data(package = "geokz")
+dplyr::as_tibble(IQR$results) %>% 
+  dplyr::select(Item, Title) %>% 
+    dplyr::filter(grepl("kaz_adm1_sf", Item))
+```
+
+Looking at the names of `kaz_adm2_sf` there is `r prettyNum( ncol(geokz::kaz_adm2_sf) )` different variables from each rayons
+
+```{r kaz_adm1_sf_names}
+names(geokz::kaz_adm1_sf)
+```
+
+With these Oblast keys you can easily filter Oblasts for plotting or you can list different regional (Multi-Oblast) breakdowns.
+
+```{r kaz_adm1_sf_key_count}
+geokz::kaz_adm1_sf %>%
+  sf::st_drop_geometry() %>% 
+    dplyr::count(ADM1_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ISO_3166_2)
+```
+
+`kaz_adm1_sf` keys are joined with the oblast spatial data (geographic features) by default, meaning that data returned by `get_kaz_oblasts_map()` can be aggregated as it is.
+
+## Administrative units level 2 keys
+
+Official administrative regions in Kazakhstan are based on rayons (the district units of principal units) or  Administrative units level 2. From 2018 there are 216 rayons (equivalent territories, for example, related to city administrations - City of Oblast Significance and Rayons of Cities of Republican Significance) and the number has been increasing since the reorganization of Kazakhstan in 1997 through the division of districts.
+
+Each rayons belongs to a higher level regional classifications such as regions (Oblast) or Administrative units level 1. `kaz_adm2_sf`-datasets are based on Kazakhstani administrative division [Statistical classification](https://stat.gov.kz/api/getFile/?docId=ESTAT274201)(2018 version) with few modification and provided on yearly basis.
+
+Note, the large cities with more than 400 thousand inhabitants (now, Aktobe and Karaganda) also have regional divisions, but such districts are not considered separate administrative units of the 3 level, but are referred to the 3 level, like rural districts with 5-10 settlements.
+
+```{r kaz_adm2_sf}
+IQR <- data(package = "geokz")
+dplyr::as_tibble(IQR$results) %>% 
+  dplyr::select(Item, Title) %>% 
+    dplyr::filter(grepl("kaz_adm2_sf", Item))
+```
+
+Looking at the names of `kaz_adm2_sf` there is `r prettyNum( ncol(geokz::kaz_adm2_sf) )` different variables from each rayons
+
+```{r kaz_adm2_sf_names}
+names(geokz::kaz_adm2_sf)
+```
+
+With these rayon keys you can easily aggregate rayons for plotting or you can list different regional (Oblast) breakdowns.
+
+```{r kaz_adm2_sf_key_count}
+geokz::kaz_adm2_sf %>%
+  sf::st_drop_geometry() %>% 
+    dplyr::count(ADM1_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ISO_3166_2)
+```
+
+`kaz_adm2_sf` keys are joined with the rayon spatial data (geographic features) by default, meaning that data returned by `get_kaz_rayons_map()` can be aggregated as it is.
+
+## Administrative units level 3 keys
+
+In the Administrative units 3 level there are 47 cities of regional significance, 4 urban districts (2 each in the cities of regional significance Karaganda and Aktobe), 26 village administrations (akimats), 2283 rural district akimats and 82 rural akimats.
+
+## Centers of Administrative units level 2
+
+The coverage on  Centers of Administrative units level 2 including the Capital Nur-Sultan (formerly Astana), 3 Cities of Republican Significance (Almaty, Shymkent and also Baikonur or Baykonyr, near is the World's First Spaceport) and all center of Oblasts (the principal units of a country) of Kazakhstan (2019 version).
+
+Looking at the names of [kaz_cnt1_sf](geokz::kaz_cnt1_sf) there is `r prettyNum( ncol(geokz::kaz_cnt1_sf) )` different variables from each centers.
+
+```{r kaz_cnt1_sf_names}
+names(geokz::kaz_cnt1_sf)
+```
+
+## Spatial data {#spatial_data}
+
+Spatial data is provided as administrative regions (polygons) and administrative district (polygons) and region centers (points).
+
+The **Default Projection** uses [A Lambert Conformal Conic (LCC)](https://proj.org/operations/projections/lcc.html) with _Krasovsky 1940 ellipsoid_ and _First standard parallel_ - 45 N, _Second standard parallel_ - 51 N, _Longitude of projection center_ - 67 E, _Latitude of projection center_ - 48 N.
+
+### Oblast borders
+
+Oblast and Cities of Republican Significance borders are provided yearly from 2018.
+
+```{r kaz_adm1_sf_map, fig.height = 4, fig.width = 7}
+rayons <- get_kaz_oblasts_map()
+plot(rayons["ADM1_EN"], border = NA, 
+     main = "Maps of All Kazakhstani Administrative units level 1 - Oblasts")
+```
+
+Source: [The Centre for Humanitarian Data](https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy) is managed by the United Nations Office for the Coordination of Humanitarian Affairs (OCHA).
+
+Use can use names of Regions in different languages (English, Russian or Kazakh) for filtering and binding geographic features. Non-latin characters you can convert into Unicode (not ASCII-printable) code points, for example, `cat(stringi::stri_escape_unicode("Нұр-Сұлтан (қала)"))`.
+
+```{r Non-latin characters}
+x <- "\u041d\u04b1\u0440-\u0421\u04b1\u043b\u0442\u0430\u043d (\u049b\u0430\u043b\u0430)"
+get_kaz_oblasts_map(ADM1_KK = x) %>%
+  dplyr::select("KATO", "ADM1_EN", "ADM1_KK", "ADM1_RU", "ADM1_PCODE", "ISO_3166_2") %>% 
+    sf::st_drop_geometry() %>% 
+      knitr::kable(., caption = "Administrative unit level 1 - \nThe Capital (kaz. <b>'\u041d\u04b1\u0440-\u0421\u04b1\u043b\u0442\u0430\u043d (\u049b\u0430\u043b\u0430)'</b>")
+
+```
+
+
+### Rayon borders
+
+Rayon and Cities of Republican Significance borders are provided by 2018 version.
+
+```{r kaz_adm2_sf_map, fig.height = 4, fig.width = 7}
+rayons <- get_kaz_rayons_map()
+plot(rayons["ADM2_EN"], border = NA, 
+     main = "Maps of All Kazakhstani Administrative units level 2 - Rayons")
+```
+
+Source: [The Centre for Humanitarian Data](https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy) is managed by the United Nations Office for the Coordination of Humanitarian Affairs (OCHA). The borders of districts were corrected by Alexander Rodionov in [QGIS](https://qgis.org/).
+
+### Centers of Administrative units 1 Level
+
+Oblast Centers and Cities of Republican Significance borders are provided yearly from 2019 after renaming Astana into Nur-Sultan.
+
+```{r kaz_cnt1_sf, fig.height = 4, fig.width = 7}
+kaz_cnt1_sf <-
+  sf::st_transform(x = kaz_cnt1_sf,
+                   crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass")
+
+kaz_cnt1_sf$punch <- (5 - kaz_cnt1_sf$TYPE_CNT1)
+
+# adding to a plot of an sf object only works when using reset=FALSE in the first plot
+plot(x = get_kaz_oblasts_map()["ADM1_EN"], reset = FALSE, cex.main = 1.0,
+     main = "KAZ: The Capital, Cities of Republican Significance & Oblast Centers (ADM1)")
+plot(kaz_cnt1_sf["KATO"], col = "red", pch = "o", add = TRUE)
+
+```
+
+The cities mapped by Alexander Rodionov in [QGIS](https://qgis.org/).
+
+## Use several packages for mapping (**{tmap}**, **{ggplot2}**, **{leaflet}**)
+
+### Package **{tmap}**: Joining attribute data with geokz data {#multiple-types}
+
+This vignettes provides few examples on how to join attribute data from common sources of attribute data. Here we are using data from two different sources of [The Bureau of National Statistics](https://stat.gov.kz/about/general/regulation) of the Agency for Strategic Planning and Reforms of the Republic of Kazakhstan: [the Population of the Republic of Kazakhstan](https://stat.gov.kz/api/getFile/?docId=ESTAT431598) and the Area of [Kazakhstani Regions](https://en.wikipedia.org/wiki/Regions_of_Kazakhstan). Third is [Zones of Kazakhstan are distinguished according to natural conditions](https://adilet.zan.kz/rus/docs/V2000021691#z70).
+
+#### Population Density of Kazakhstan (2021)
+
+<!-- #### Demographic statistics of **Kazakhstan** -->
+
+<!-- | Regions | Center | Area, sq. km | Population, 2021 | Population density | [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ) Code | -->
+<!-- |---|---|---|---|---|---| -->
+<!-- | Akmola Region | [Kokshetau](https://en.wikipedia.org/wiki/Kokshetau) | 146 219 | 735 481 | 5.0 | KZ-AKM | -->
+<!-- | Aktobe Region | [Aktobe](https://en.wikipedia.org/wiki/Aktobe) | 300 629 | 893 669 | 3.0 | KZ-AKT | -->
+<!-- | Almaty Region | [Taldykorgan](https://en.wikipedia.org/wiki/Taldykorgan) | 223 924 | 2 077 656 | 9.3 | KZ-ALM | -->
+<!-- | Atyrau Region | [Atyrau](https://en.wikipedia.org/wiki/Atyrau) | 118 631 | 657 118 |5.5 | KZ-ATY | -->
+<!-- | East Kazakhstan Region | [Oskemen](https://en.wikipedia.org/wiki/Oskemen) | 283 226 | 661 172	| 2.3 | KZ-VOS | -->
+<!-- | Jambyl Region | [Taraz](https://en.wikipedia.org/wiki/Taraz) | 144 264 | 1 139 151 | 7.9 | KZ-ZHA | -->
+<!-- | Karaganda Region | [Karaganda](https://en.wikipedia.org/wiki/Karaganda) | 427 982 | 1 375 788 |	3.2 | KZ-KAR | -->
+<!-- | Kostanay Region | [Kostanay](https://en.wikipedia.org/wiki/Kostanay) | 196 001 | 864 529 | 4.4 | KZ-KUS | -->
+<!-- | Kyzylorda Region | [Kyzylorda](https://en.wikipedia.org/wiki/Kyzylorda) | 226 019 | 814 461	| 3.6 | KZ-KZY | -->
+<!-- | _Baykonyr_ | [Baykonyr](https://en.wikipedia.org/wiki/Baikonur) |57 | 77 0019 | 1 351.2  | KZ-BAY | -->
+<!-- | Mangystau Region | [Aktau](https://en.wikipedia.org/wiki/Aktau) | 165 642 | 719 | 559	4.3  | KZ-MAN | -->
+<!-- | North Kazakhstan Region | [Petropavl](https://en.wikipedia.org/wiki/Petropavl) | 97 993 | 751 011	| 7.7 | KZ-SEV | -->
+<!-- | Pavlodar Region | [Pavlodar](https://en.wikipedia.org/wiki/Pavlodar) | 124 800 |543 679 |	4.4 | KZ-PAV | -->
+<!-- | Turkistan Region | [Turkistan](https://en.wikipedia.org/wiki/Turkistan_(city)) | 117 249 |2 044 551	| 17.4 | KZ-TUR | -->
+<!-- | West Kazakhstan Region | [Oral](https://en.wikipedia.org/wiki/Oral,_Kazakhstan) | 151 339 | 1 363 656 |	9.0 | KZ-ZAP| -->
+<!-- | _Nur-Sultan_ | [Nur-Sultan](https://en.wikipedia.org/wiki/Nur-Sultan) | 710 | 1 184 469	| 1 668.3 | KZ-AST | -->
+<!-- | _Almaty_ | [Almaty](https://en.wikipedia.org/wiki/Almaty) | 319 | 1 977 011	| 6 197.5| KZ-ALA | -->
+<!-- | _Shymkent_ | [Shymkent](https://en.wikipedia.org/wiki/Shymkent) | 1170 | 1 074 167	918.1 | KZ-SHY | -->
+
+```{r Population density, fig.height = 4, fig.width = 7}
+
+library(geokz)
+library(dplyr)
+library(knitr)
+
+Population_Density_df <- 
+  data.frame(
+    ISO_3166_2 = c("KZ-AKM", "KZ-AKT", "KZ-ALM", "KZ-ATY", "KZ-VOS", "KZ-ZHA", "KZ-KAR", "KZ-KUS", "KZ-KZY", "KZ-MAN", "KZ-SEV", "KZ-PAV", "KZ-YUZ", "KZ-ZAP", "KZ-AST", "KZ-ALA", "KZ-SHY"), 
+    Region = c("Akmola Region", "Aktobe Region", "Almaty Region", "Atyrau Region", "East Kazakhstan Region", "Jambyl Region", "Karaganda Region", "Kostanay Region", "Kyzylorda Region", "Mangystau Region", "North Kazakhstan Region", "Pavlodar Region", "Turkistan Region", "West Kazakhstan Region", "Nur-Sultan", "Almaty", "Shymkent"),
+    Area = c(146219, 300629, 223924, 118631, 283226, 144264, 427982, 196001, 226019, 165642, 97993, 124800, 117249, 151339, 710, 319, 1170),
+    Population = c(735481, 893669, 2077656, 657118, 661172, 1139151, 1375788, 864529, 814461, 719559, 751011, 543679, 2044551, 1363656, 1184469, 1977011, 1074167)
+) %>% 
+  dplyr::mutate(Population_Density = round( Population / Area, 1))
+
+knitr::kable(Population_Density_df, caption = 'Demographic statistics of <b>Kazakhstan</b>',
+             format.args = list(big.mark = ' '))
+
+dplyr::inner_join( x = get_kaz_oblasts_map(),
+                   y = Population_Density_df[, c("ISO_3166_2", "Population_Density")],
+                   by = c("ISO_3166_2" = "ISO_3166_2") ) %>% 
+  tmap::qtm(
+    shp = ., 
+    fill = "Population_Density", 
+    fill.n = 6,
+    fill.style = "quantile",
+    fill.text  = "Population_Density",
+    fill.title = "Population Density \n(people per sq.km)",
+    text = "Population_Density",
+    title = "Population Density of Kazakhstan (2021)",
+    format = "World"
+    )
+
+```
+
+#### Zones are distinguished according to natural conditions {#natural_conditions}
+
+The territory of Kazakhstan is located in four climatic zones - forest-steppe, steppe, semi-desert and desert. The presence of mountains in the south and east of the country leads to the emergence of the allocation of special mountainous regions, significantly different from the surrounding area. So on the territory of the Republic **6** zones are distinguished according to natural conditions: Steppe (1), Dry-steppe (2), Foothill-desert-steppe (3), Desert (4), South Siberian mountain and foothill (5), Semi-desert (6).
+
+```{r Natural Zones, fig.height=4, fig.width=7}
+data(natural_zones)
+
+natural_zones %>% 
+  dplyr::count(ZONE_EN) %>%
+    dplyr::bind_rows(., data.frame( ZONE_EN = "TOTAL", n = nrow(natural_zones))) %>% 
+      knitr::kable(., 
+         caption = "Administrative units level 2 by Zones according to <b>natural conditions</b>",
+         format.args = list(big.mark = ' '))
+
+dplyr::inner_join( x = get_kaz_rayons_map(),
+                   y = natural_zones[, c("ADM2_PCODE", "ZONE_EN")],
+                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) %>%
+tmap::tm_shape(shp = .) +
+  tmap::tm_polygons(
+    col = "ZONE_EN",
+    title = "Zones according \nto natural conditions"
+  ) +
+tmap::tm_shape(shp = get_kaz_oblasts_map()) +
+  tmap::tm_borders(col = "red", lwd = 3) +
+tmap::tm_format(format = 'World_wide') +  
+tmap::tm_layout(main.title = "Zones are distinguished according to natural conditions") +
+tmap::tm_credits('Source: package {geokz}', position = c('right', 'BOTTOM'))
+
+```
+
+However even such a division adopted by the _Ministry of Agriculture_ does not reflect the presence of desert and foothill-desert lands with a subtropical climate, which occupy up to [8% of the country's area](https://ecogosfond.kz/wp-content/uploads/2018/03/NDSOS_2011-2014.pdf).
+
+#### Torgay Oblast is disbanded Region
+
+[Torgay Oblast](https://en.wikipedia.org/wiki/Torgay_Region) is disbanded Region of the Kazakh Soviet Socialist Republic from 1970 to 1988 and of independent Kazakhstan and from 1990 to 1997.
+
+Unfortunetely, simultaneous use of several types of geographic features codes or names in different languages **is not allowed**.
+
+Fortunetely, Simultaneous use of several types of International & National codes or names in different languages **is allowed** with **binding geographic features**.
+
+```{r Torgay Region, fig.height=4, fig.width=7}
+Torgay_Region <-
+  get_kaz_rayons_map(ADM2_EN = c(
+    "Esil",
+    "Zhaksy",
+    "Zharkain")) %>%
+  dplyr::filter(ADM1_EN == "Akmola") %>%  # There are three rayons named Esil by Esil (Ishim) river
+  dplyr::bind_rows(
+    get_kaz_rayons_map(ADM2_PCODE = c(
+      "KZ391600",                         # Arkalyk city was a Center of Torgay Oblast
+      "KZ393400",                         # Amangeldi rayon
+      "KZ394200")                         # Zhangeldi rayons
+      )
+  ) %>% 
+  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN))
+
+center_sf <-
+  data.frame(
+    NAME = c("Arkalyk"),
+    BRANCH = c("The Center"),
+    LINK = c("https://en.wikipedia.org/wiki/Arkalyk"),
+    LAT = c(50.24861),
+    LON = c(66.91139)
+  ) %>%
+  sf::st_as_sf(
+    coords = c("LON", "LAT"), # columns with geometry by x - "LON" and y - "LAT"
+    crs = "+proj=longlat +datum=WGS84"
+  )
+
+to_bb <-
+  Torgay_Region %>%
+  sf::st_bbox() %>%
+  sf::st_as_sfc() %>%
+  sf::st_buffer(dist = 50000)
+
+tmap::tm_shape(Torgay_Region) +
+  tmap::tm_polygons(
+    col = "ADM2_EN",
+    border.col = "grey",
+    title = "Administrative \nunits level 2",
+    labels = Torgay_Region$ADM2_KK
+  ) +
+  tmap::tm_text("ADM2_KK", col = "gray10", size = 0.9, shadow = TRUE) +
+tmap::tm_shape(
+  shp  = get_kaz_oblasts_map(),
+  bbox = to_bb
+  ) +
+  tmap::tm_borders(
+    col = "red",
+    lwd = 4
+  ) +
+  tmap::tm_text("ADM1_KK", col = "gray10", size = 1.2, shadow = TRUE) +
+tmap::tm_shape(center_sf) +
+  tmap::tm_dots(size = 1) +
+tmap::tm_graticules(lines = FALSE) +
+  tmap::tm_format(format = 'World') +
+  tmap::tm_layout(
+    main.title = "Disbanded Torgay Oblast (1970-1988, 1990-1997)",
+    main.title.size = 0.9,
+    legend.position = c("left", "top")
+  ) +
+  tmap::tm_credits('Source: package {geokz}', position = c('right', 'bottom'), size = 1.2)
+
+```
+
+#### Interactive map using {tmap} package in **view** mode
+
+See use [{tmap} & {leaflet} packages](../html/kaz_cnt1_sf.html#tmap_view) for draw of Interactive Maps as `sf` objects.
+
+### Package {ggplot2}: Flexibility in each of the layers and many aspects of visualisation
+
+#### Kazakhstan: Administrative units level 1 (Oblasts & Cities of Republican Significance)
+
+```{r ADM1: ggplot2 & KAZ, fig.height=4, fig.width=7}
+library(ggplot2)
+library(dplyr)
+
+get_kaz_oblasts_map() %>%
+  dplyr::mutate(ADM1_EN = factor(ADM1_EN, levels = ADM1_EN)) %>%
+  ggplot2::ggplot(data = .) +
+    ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM1_EN)) +  # forcats::fct_inorder(ADM1_EN)
+    ggplot2::geom_sf_text(mapping = ggplot2::aes(label = ADM1_EN)) +
+    ggplot2::theme_bw() +
+    ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 1")) +
+    ggplot2::labs(title = "Kazakhstan: Administrative units level 1
+(Oblasts & Cities of Republican Significance)",
+      x = NULL,
+      y = NULL,
+      caption = "Source: package {geokz}"
+    )
+```
+
+#### Kazakhstan: Mangystau Oblast (Rayons & Cities of Oblast Significance)
+
+```{r ADM2: ggplot2 & Mangystau, fig.height=4, fig.width=7}
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+
+kaz_adm2_sf %>%
+  dplyr::filter(ADM1_EN =="Mangystau") %>%
+  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) %>%
+  ggplot2::ggplot(data = .) +
+    ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM2_EN)) +   # forcats::fct_inorder(ADM2_EN)
+    ggplot2::geom_sf_text(
+      mapping = ggplot2::aes(label = ADM2_EN),
+      size = 3
+      ) +
+    ggplot2::coord_sf(crs=2499) + # Pulkovo 1942 / Gauss-Kruger CM 51E. See <https://epsg.io/2499>.
+    ggplot2::scale_fill_brewer(palette = "Pastel2") +  # uses library(RColorBrewer)
+    ggplot2::theme_light() +
+    ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 2")) +
+    ggplot2::labs(title = "Kazakhstan: Mangystau Oblast
+(Rayons & Cities of Oblast Significance)",
+      x = NULL,
+      y = NULL,
+      caption = "Source: package {geokz}"
+    )
+
+
+```
+
+#### Kazakhstan: Kyzylorda Oblast (Administrative Center, Rayons & City of Republican Significance)
+
+```{r CNT1: ggplot2 & Kyzyorda, fig.height=4, fig.width=7}
+library(dplyr)
+library(sf)
+library(ggplot2)
+
+ko_bb <-
+  dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') %>%
+  sf::st_transform(crs = 2501) %>% # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
+  sf::st_bbox() %>%
+  sf::st_as_sfc() %>%
+  sf::st_buffer(dist = 30000)
+
+kaz_adm2_sf %>%
+  dplyr::filter(ADM1_EN =="Kyzylorda") %>%
+  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) %>%
+  ggplot2::ggplot(data = .) +
+    ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
+      data  = sf::st_geometry(kaz_adm1_sf),
+      color = "red",
+      size  = 1
+    ) +
+    ggplot2::geom_sf(                                           # Rayons of Kyzylorda Oblasts
+      mapping = ggplot2::aes(fill = ADM2_EN)
+      ) +  # forcats::fct_inorder(ADM2_EN)
+    ggplot2::geom_sf_text(                                      # Labels of Rayons
+      data = dplyr::filter(kaz_adm2_sf, (ADM1_EN == 'Kyzylorda' &
+                              magrittr::and(ADM2_EN != "Kyzylorda", ADM2_EN != "Baykonyr"))),
+      mapping = ggplot2::aes(label = ADM2_EN),
+      size = 2.5
+    ) +
+    ggplot2::scale_fill_brewer(palette = "Pastel1") +
+    ggplot2::geom_sf(                     # Administrative Center & City of Republican Significance
+      data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
+      size = 3,
+      col = "red",
+      shape = 19
+    ) +
+    ggplot2::geom_sf_text(                                      # Labels of Cities
+      data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
+      mapping = ggplot2::aes(label = NAME_EN),
+      nudge_x = 65000,
+      nudge_y = -9000,
+      size = 4
+    ) +
+    ggplot2::geom_sf(                                           # Boundaries of Kazakhstan
+      data  = sf::st_geometry(kaz_adm0_sf),
+      alpha  = 0,
+      color = "brown",
+      size  = 2
+    ) +
+  # Set new Coordinate System: Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
+    ggplot2::coord_sf(xlim = c(sf::st_bbox(ko_bb)$xmin, sf::st_bbox(ko_bb)$xmax),
+                      ylim = c(sf::st_bbox(ko_bb)$ymin, sf::st_bbox(ko_bb)$ymax),
+                      crs = 2501, expand = FALSE) +
+    ggplot2::theme_linedraw() +
+    ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 2")) +
+    ggplot2::labs(title = "Kazakhstan: Kyzylorda Oblast
+(Administrative Center, Rayons & City of Republican Significance)",
+      x = NULL,
+      y = NULL,
+      caption = "Source: package {geokz}"
+      )
+
+```
+
+### Package {leaflet}: Interactive map widget using **htmlwidgets**
+
+#### Interactive Map of Kazakhstan with the Capitals
+
+See use [{leaflet} package](../html/kaz_adm1_sf.html#leaflet) for draw of Interactive Maps as `sf` objects.
+
+#### Interactive Map of Kazakhstan with Rayons
+
+See use [{leaflet} package](../html/kaz_adm2_sf.html#leaflet) for draw of Interactive Maps as `sf` objects.
+
+#### Interactive map of Kazakhstan with Region hyperlinks
+
+See use [{leaflet} package](../html/kaz_cnt1_sf.html#leaflet) for draw of Interactive Maps with hyperlinks as `sf` objects.

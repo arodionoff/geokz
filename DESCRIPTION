@@ -1,0 +1,44 @@
+Type: Package
+Package: geokz
+Title: Offers Various Kazakhstani Maps as Data Frames and 'sf' Objects
+Version: 0.0.0.9010
+Authors@R: 
+    person(given = "Alexander",
+           family = "Rodionov",
+           role = c("aut", "cre"),
+           email = "a.rodionoff@gmail.com",
+           comment = c(ORCID = "0000-0003-2028-5421"))
+Description: Administrative Boundaries of Kazakhstan at several levels
+    (Country, Oblasts & Cities of Republican Significance, Rayons of Oblasts &
+    City of Oblast Significance) based on the The Bureau of National Statistics
+    of the Agency for Strategic Planning and Reforms of the Republic of 
+    Kazakhstan <https://stat.gov.kz/region/list/>.  It uses {tmap} and {ggplot2}
+    packages for visualization of maps, also provides a interactive 'leaflet' 
+    JS plugin and the ability of downloading and processing static tiles.
+License: CC BY 4.0 + file LICENSE
+Encoding: UTF-8
+Language: en
+URL: https://github.com/arodionoff/geokz
+BugReports: https://github.com/arodionoff/geokz/issues
+Depends: 
+    R (>= 3.6.0)
+Imports: 
+    methods, 
+    utils,
+    sf
+Suggests: 
+    testthat (>= 3.0.0),
+    tmap,
+    magrittr,
+    dplyr,
+    RColorBrewer,
+    ggplot2,
+    leaflet,
+    knitr,
+    rmarkdown
+VignetteBuilder:
+    knitr
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Config/testthat/edition: 3
