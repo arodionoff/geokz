@@ -1,7 +1,7 @@
 Type: Package
 Package: geokz
 Title: Offers Various Kazakhstani Maps as Data Frames and 'sf' Objects
-Version: 0.0.0.9010
+Version: 0.0.0.9011
 Authors@R: 
     person(given = "Alexander",
            family = "Rodionov",
