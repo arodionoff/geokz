@@ -116,6 +116,8 @@ names(geokz::kaz_cnt1_sf)
 
 Spatial data is provided as administrative regions (polygons) and administrative district (polygons) and region centers (points).
 
+You can use ESRI ArcView shapefiles (\*.cpg, \*.dbf, \*.prj, \*.shp, \*.shx) load as [`shapes`](inst/shapes) subdirectory directly or by coverages.
+
 The **Default Projection** uses [A Lambert Conformal Conic (LCC)](https://proj.org/operations/projections/lcc.html) with _Krasovsky 1940 ellipsoid_ and _First standard parallel_ - 45 N, _Second standard parallel_ - 51 N, _Longitude of projection center_ - 67 E, _Latitude of projection center_ - 48 N.
 
 ### Oblast borders
