@@ -172,7 +172,8 @@ urls <-
     "Mangystau_Region", "Pavlodar_Region", "North_Kazakhstan_Region", "Turkistan_Region",
     "East_Kazakhstan_Region", "Nur-Sultan", "Almaty", "Shymkent")
 
-# Basemap can be varied from a list of providers<https://leaflet-extras.github.io/leaflet-providers/preview>.
+# Basemap can be varied from a list of {leaflet} providers
+# <https://leaflet-extras.github.io/leaflet-providers/preview>.
 
 leaflet::leaflet() %>%
   leaflet::addProviderTiles(provider = "Esri.WorldPhysical") %>%
