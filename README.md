@@ -6,11 +6,11 @@ This project downloads a set of shapefiles relevant to the Republic of Kazakhsta
 
 `geokz`-package provides access to multiple dataset of different types and for different use. In this vignette we introduce the different datas and explain their use cases. 
 
-## Package installation {#package_installation}
+## Package installation
 
 `geokz` can be installed from Github using:
 
-`remotes::install_github("arodionoff/geokz")`
+`devtoo::install_github("arodionoff/geokz", build_vignettes = TRUE)`
 
 Vignette [*Making maps using {geokz}-package*](vignettes/making_maps.Rmd) provides multiple real-world examples of their usage.
 
