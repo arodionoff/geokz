@@ -27,7 +27,7 @@ natural:
 
 * **natural_zones**: the list of Administrative units level 2 of Kazakhstan by Zones according to the natural conditions.
 
-You can use ESRI ArcView shapefiles (\*.cpg, \*.dbf, \*.prj, \*.shp, \*.shx) load as [`shapes`](shapes) subdirectory.
+You can use ESRI ArcView shapefiles (\*.cpg, \*.dbf, \*.prj, \*.shp, \*.shx) load as [`shapes`](inst/shapes) subdirectory.
 
 ## A call for action
 
