@@ -182,7 +182,7 @@ This vignettes provides few examples on how to join attribute data from common s
 
 #### Population Density of Kazakhstan (2021)
 
-<!-- #### Demographic statistics of **Kazakhstan** -->
+<!-- Demographic statistics of **Kazakhstan** -->
 
 <!-- | Regions | Center | Area, sq. km | Population, 2021 | Population density | [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ) Code | -->
 <!-- |---|---|---|---|---|---| -->
