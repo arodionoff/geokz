@@ -206,35 +206,37 @@ kaz_adm2_sf \%>\%
 
 if (requireNamespace("leaflet", "magrittr", quietly = TRUE)) {
 
-  library(leaflet)
-  library(magrittr)
+library(leaflet)
+library(magrittr)
 
-  urls <-
-    c("Akmola_Region", "Aktobe_Region", "Almaty_Region", "Atyrau_Region", "West_Kazakhstan_Region",
-      "Jambyl_Region" , "Karaganda_Region", "Kostanay_Region", "Kyzylorda_Region",
-      "Mangystau_Region", "Pavlodar_Region", "North_Kazakhstan_Region", "Turkistan_Region",
-      "East_Kazakhstan_Region", "Nur-Sultan", "Almaty", "Shymkent")
+urls <-
+  c("Akmola_Region", "Aktobe_Region", "Almaty_Region", "Atyrau_Region", "West_Kazakhstan_Region",
+    "Jambyl_Region" , "Karaganda_Region", "Kostanay_Region", "Kyzylorda_Region",
+    "Mangystau_Region", "Pavlodar_Region", "North_Kazakhstan_Region", "Turkistan_Region",
+    "East_Kazakhstan_Region", "Nur-Sultan", "Almaty", "Shymkent")
 
-  leaflet::leaflet() \%>\%
-    leaflet::addProviderTiles(provider = "Esri.WorldPhysical") \%>\%
-    leaflet::addPolygons(
-      data = sf::st_zm(geokz::kaz_adm1_sf, geometry),
-      weight = 1,
-      color = "darkred",
-      fillColor = "coral",
-      fillOpacity = 0.3,
-      smoothFactor = 0.5,
-      popup = ~paste0("Region: ", '<a href = "https://en.wikipedia.org/wiki/', urls, '"> ',
-                      ADM1_EN, "</a><br>", "KATO: ", KATO, "<br>", "ISO 3166-2: ", ISO_3166_2),
-      label = ~paste(ADM1_EN, ":", ADM1_PCODE),
-      labelOptions = labelOptions(direction = "auto")
-    ) \%>\%
-    leaflet::addCircleMarkers(
-      data = geokz::kaz_cnt1_sf,
-      color = "brown",
-      radius = 3,
-      label = ~paste0("Center of ", ADM1_EN,": ", NAME_EN)
-    )
+# Basemap can be varied from a list of providers<https://leaflet-extras.github.io/leaflet-providers/preview>.
+
+leaflet::leaflet() \%>\%
+  leaflet::addProviderTiles(provider = "Esri.WorldPhysical") \%>\%
+  leaflet::addPolygons(
+    data = sf::st_zm(geokz::kaz_adm1_sf, geometry),
+    weight = 1,
+    color = "darkred",
+    fillColor = "coral",
+    fillOpacity = 0.3,
+    smoothFactor = 0.5,
+    popup = ~paste0("Region: ", '<a href = "https://en.wikipedia.org/wiki/', urls, '"> ',
+                    ADM1_EN, "</a><br>", "KATO: ", KATO, "<br>", "ISO 3166-2: ", ISO_3166_2),
+    label = ~paste(ADM1_EN, ":", ADM1_PCODE),
+    labelOptions = labelOptions(direction = "auto")
+  ) \%>\%
+  leaflet::addCircleMarkers(
+    data = geokz::kaz_cnt1_sf,
+    color = "brown",
+    radius = 3,
+    label = ~paste0("Center of ", ADM1_EN,": ", NAME_EN)
+  )
 
 
 }  # The end for {leaflet} package
