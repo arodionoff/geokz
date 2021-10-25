@@ -130,6 +130,9 @@ NULL
 #' [package vignette](../doc/making_maps.html#spatial_data) or `vignette("making_maps", package = "geokz")`
 #'
 #' @example inst/examples/kaz_adm2_sf.R
+#'
+#' ![](inst/images/Kazakhstan.png)
+#'
 NULL
 
 #' @title Map of All Administrative centers level 1 of Kazakhstan
