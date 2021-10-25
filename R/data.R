@@ -129,9 +129,11 @@ NULL
 #'
 #' [package vignette](../doc/making_maps.html#spatial_data) or `vignette("making_maps", package = "geokz")`
 #'
-#' @example inst/examples/kaz_adm2_sf.R
+#' @section Figures:
+#' \if{html}{\figure{Kazakhstan.png}{options: width=100\%}}  % {man/figures/Kazakhstan.png} \
+#' \if{latex}{\figure{Kazakhstan.png}{options: width=7.5in}}
 #'
-#' ![](inst/images/Kazakhstan.png)
+#' @example inst/examples/kaz_adm2_sf.R
 #'
 NULL
 

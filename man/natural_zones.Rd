@@ -53,7 +53,7 @@ dplyr::inner_join( x = get_kaz_rayons_map(),
     shp = .,
     fill = "ZONE_EN",
     fill.title = "Zones according \nto natural conditions",
-    main.title = "Zones are distinguished according to natural conditions of Kazakhstan",
+    main.title = "Zones are distinguished according to natural conditions",
     format = "World"
   )
 

@@ -40,6 +40,12 @@ They contain Rayons of Oblast & City of Oblast Significance and also Rayons of C
 Republican Significance. The borders of districts were corrected by Alexander Rodionov in
 \href{https://qgis.org/}{QGIS}.
 }
+\section{Figures}{
+
+\if{html}{\figure{Kazakhstan.png}{options: width=100\%}}  \% {man/figures/Kazakhstan.png} \
+\if{latex}{\figure{Kazakhstan.png}{options: width=7.5in}}
+}
+
 \examples{
 data("kaz_adm1_sf")
 data("kaz_adm2_sf")
