@@ -115,6 +115,7 @@ natural_zones <-
                                                  "Пустынная", "Южно-Сибирская горная и предгорная", "Полупустынная")),
                      ADM1_RU, ADM2_RU, ADM2_PCODE)
 
-utils::write.csv(natural_zones, file = paste0("inst/extdata/", "kaz_zones.csv"))
+utils::write.csv(natural_zones, file = paste0("inst/extdata/", "kaz_zones.csv"),
+                 row.names = FALSE, fileEncoding = "UTF-8")
 
 usethis::use_data(natural_zones, overwrite = TRUE, compress = 'xz', version = 3)
