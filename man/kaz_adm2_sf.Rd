@@ -42,7 +42,7 @@ Republican Significance. The borders of districts were corrected by Alexander Ro
 }
 \section{Figures}{
 
-\if{html}{\figure{Kazakhstan.png}{options: width=100\%}}  \% {man/figures/Kazakhstan.png} \
+\if{html}{\figure{Kazakhstan.png}{options: width=100\%}}  \% man/figures/Kazakhstan.png
 \if{latex}{\figure{Kazakhstan.png}{options: width=7.5in}}
 }
 

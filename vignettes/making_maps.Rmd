@@ -280,6 +280,55 @@ tmap::tm_credits('Source: package {geokz}', position = c('right', 'BOTTOM'))
 
 However even such a division adopted by the _Ministry of Agriculture_ does not reflect the presence of desert and foothill-desert lands with a subtropical climate, which occupy up to [8% of the country's area](https://ecogosfond.kz/wp-content/uploads/2018/03/NDSOS_2011-2014.pdf).
 
+Loading Raw data as Comma Separated Value file and join to Geographic coverage for mapping Zones according to natural conditions.
+
+```{r  Natural Zones: Load External data file, fig.height=4, fig.width=7}
+natural_zones_df <- 
+  system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = FALSE)
+
+if (natural_zones_df == "") {
+  natural_zones_df <- utils::read.csv(paste0("inst/extdata/", "kaz_zones.csv"), encoding = "UTF-8")
+} else {
+  natural_zones_df <- 
+    system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) %>% 
+      utils::read.csv(file = ., encoding = "UTF-8")
+}
+
+Zones_EN_labels <- 
+  c("Steppe", "Dry-steppe", "Foothill-desert-steppe", "Desert",
+    "South Siberian mountain and foothill", "Semi-desert")
+
+Zones_pallete <- c("yellowgreen", "khaki", "darkolivegreen1", "peachpuff2",
+                   "olivedrab", "navajowhite") %>% 
+  stats::setNames(Zones_EN_labels)
+
+dplyr::inner_join( x = get_kaz_rayons_map(),
+                   y = natural_zones_df[, c("ADM2_PCODE", "ZONE_EN")],
+                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) %>%
+  dplyr::mutate(KATO = as.character(KATO),
+                ZONE_EN = factor(ZONE_EN, levels = Zones_EN_labels)) %>% 
+ggplot2::ggplot(data = .) +
+  ggplot2::geom_sf(mapping = ggplot2::aes(fill = ZONE_EN)) +  # Rayons - Zones by natural conditions
+  ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
+    data  = sf::st_geometry(get_kaz_oblasts_map()),
+    fill = NA,
+    color = "red",
+    size  = 1.25,
+    show.legend = FALSE
+  ) +
+  ggplot2::scale_fill_manual(
+    values = Zones_pallete, 
+    name = "Zones according \nto natural conditions"
+  ) +
+  ggplot2::theme_light() +
+  ggplot2::labs(title = "Zones are distinguished according to natural conditions",
+    x = NULL,
+    y = NULL,
+    caption = "Source: package {geokz}"
+  )
+
+```
+
 #### Torgay Oblast is disbanded Region
 
 [Torgay Oblast](https://en.wikipedia.org/wiki/Torgay_Region) is disbanded Region of the Kazakh Soviet Socialist Republic from 1970 to 1988 and of independent Kazakhstan and from 1990 to 1997.
