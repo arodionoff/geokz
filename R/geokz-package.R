@@ -9,9 +9,12 @@
 #' @import methods
 #' @import utils
 #' @import sf
-#' @importFrom utils read str
+#' @importFrom sf sf.colors st_as_sf st_as_sfc st_bbox st_buffer st_crs
+#' @importFrom sf st_drop_geometry st_geometry st_is_valid st_read st_transform st_zm
+#' @importFrom utils read.csv str
 #'
 #' @section Functions:
+#'
 #'
 #' * [get_kaz_oblasts_map](get_kaz_oblasts_map.html) - Get Oblasts & Cities of Republican Significance of Kazakhstan
 #'   as `sf` polygons.

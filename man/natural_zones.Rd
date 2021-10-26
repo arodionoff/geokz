@@ -73,7 +73,7 @@ Zones_EN_labels <-
 
 Zones_pallete <- c("yellowgreen", "khaki", "darkolivegreen1", "peachpuff2",
                    "olivedrab", "navajowhite") \%>\%
-  setNames(Zones_EN_labels)
+  stats::setNames(Zones_EN_labels)
 
 natural_zones_df <-
 system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) \%>\%
