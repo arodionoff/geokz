@@ -9,7 +9,7 @@
 #' @import methods
 #' @import utils
 #' @import sf
-#' @importFrom utils head tail
+#' @importFrom utils read str
 #'
 #' @section Functions:
 #'

@@ -10,7 +10,7 @@ This project downloads a set of shapefiles relevant to the Republic of Kazakhsta
 
 `geokz` can be installed from Github using:
 
-`devtoo::install_github("arodionoff/geokz", build_vignettes = TRUE)`
+`devtools::install_github("arodionoff/geokz", build_vignettes = TRUE)`
 
 Vignette [*Making maps using {geokz}-package*](vignettes/making_maps.Rmd) provides multiple real-world examples of their usage.
 
