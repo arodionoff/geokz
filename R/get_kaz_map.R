@@ -128,6 +128,14 @@ get_kaz_oblasts_map <- function(KATO=NULL, ADM1_EN=NULL, ADM1_KK=NULL, ADM1_RU=N
                   ISO_3166_2_ <- ISO_3166_2
                   df_sf <- base::subset(geokz::kaz_adm1_sf, ISO_3166_2 %in% ISO_3166_2_)
                 }  }   }   }     }      }
+# If you save an sf-dataframe with a newer version of GDAL, and then try st_transform on a system with an older version
+# of GDAL, the projection info cannot be read properly. The solution is to re-set the projection:
+# EPSG:4326 or WGS84 - World Geodetic System 1984 - see https://github.com/r-spatial/sf/issues/1419
+  df_sf <-
+  sf::st_transform(
+    x = df_sf,
+    crs = 4326L
+  )
 
 # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
 # <https://proj.org/operations/projections/lcc.html>
@@ -317,6 +325,15 @@ get_kaz_rayons_map <- function(KATO=NULL, ADM1_EN=NULL, ADM1_KK=NULL, ADM1_RU=NU
                       ISO_3166_2_ <- ISO_3166_2
                       df_sf <- base::subset(geokz::kaz_adm2_sf, ISO_3166_2 %in% ISO_3166_2_)
             }  }   }    }   }  }   }   }     }      }
+
+  # If you save an sf-dataframe with a newer version of GDAL, and then try st_transform on a system with an older version
+  # of GDAL, the projection info cannot be read properly. The solution is to re-set the projection:
+  # EPSG:4326 or WGS84 - World Geodetic System 1984 - see https://github.com/r-spatial/sf/issues/1419
+  df_sf <-
+    sf::st_transform(
+      x = df_sf,
+      crs = 4326L
+    )
 
   # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
   # <https://proj.org/operations/projections/lcc.html>

@@ -157,7 +157,12 @@ testthat::test_that("geokz::natural_zones dataset for Zone of Administrative uni
   testthat::expect_type(x$ADM2_RU,     "character")
   testthat::expect_type(x$ADM2_PCODE,  "character")
 
-  x <- system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) %>%
+})
+
+testthat::test_that("natural_zones_df dataset for Zone of Administrative units level 2
+                    according to natural conditions can be loaded", {
+
+                      x <- system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) %>%
     utils::read.csv(file = ., encoding = "UTF-8")
   x$KATO <- as.character(x$KATO)
 
@@ -167,14 +172,14 @@ testthat::test_that("geokz::natural_zones dataset for Zone of Administrative uni
 
   # structure of datasets...
   testthat::expect_equal(ncol(x), 7L)
-  testthat::expect_equal(colnames(x),  c("KATO", "ZONE_EN", "ZONE_KK", "ZONE_RU",
-                                         "ADM1_RU", "ADM2_RU", "ADM2_PCODE"))
-  testthat::expect_type(x$KATO,        "character")
-  testthat::expect_type(x$ZONE_EN, "character")
-  testthat::expect_type(x$ZONE_KK, "character")
-  testthat::expect_type(x$ZONE_RU, "character")
-  testthat::expect_type(x$ADM1_RU, "character")
-  testthat::expect_type(x$ADM2_RU, "character")
+  testthat::expect_equal(colnames(x), c("KATO", "ZONE_EN", "ZONE_KK", "ZONE_RU",
+                                        "ADM1_RU", "ADM2_RU", "ADM2_PCODE"))
+  testthat::expect_type(x$KATO,       "character")
+  testthat::expect_type(x$ZONE_EN,    "character")
+  testthat::expect_type(x$ZONE_KK,    "character")
+  testthat::expect_type(x$ZONE_RU,    "character")
+  testthat::expect_type(x$ADM1_RU,    "character")
+  testthat::expect_type(x$ADM2_RU,    "character")
   testthat::expect_type(x$ADM2_PCODE, "character")
 
 })
