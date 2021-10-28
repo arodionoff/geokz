@@ -45,6 +45,11 @@ data("kaz_adm1_sf")
 data("kaz_cnt1_sf")
 
 library(sf)
+
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm1_sf) <- 4326L
+sf::st_crs(x = kaz_cnt1_sf) <- 4326L
+
 # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
 # <https://proj.org/operations/projections/lcc.html>
 # First standard parallel - 45 N, Second standard parallel - 51 N,
@@ -138,7 +143,10 @@ library(ggplot2)
 library(RColorBrewer)
 library(dplyr)
 
-ko_bb <-
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm2_sf) <- 4326L
+
+  ko_bb <-
   dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') \%>\%
   sf::st_transform(crs = 2501) \%>\% # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
   sf::st_bbox() \%>\%

@@ -52,6 +52,9 @@ data("kaz_adm2_sf")
 
 library(sf)
 
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm2_sf) <- 4326L
+
 # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
 # <https://proj.org/operations/projections/lcc.html>
 # First standard parallel - 45 N, Second standard parallel - 51 N,
@@ -66,6 +69,10 @@ plot(x = kaz_adm2_sf["ADM2_EN"], border = "grey",
      main = "Kazakhstan: Rayons & Cities of Oblast Significance (ADM2)")
 
 # Administrative Map of Units Level 1 & Level 2
+
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm1_sf) <- 4326L
+
 kaz_adm1_sf <-
   sf::st_transform(x = kaz_adm1_sf,
                    crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass")

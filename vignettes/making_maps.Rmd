@@ -167,6 +167,10 @@ Source: [The Centre for Humanitarian Data](https://data.humdata.org/dataset/kaza
 Oblast Centers and Cities of Republican Significance borders are provided yearly from 2019 after renaming Astana into Nur-Sultan.
 
 ```{r kaz_cnt1_sf, fig.height = 4, fig.width = 7}
+
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_cnt1_sf) <- 4326L
+
 kaz_cnt1_sf <-
   sf::st_transform(x = kaz_cnt1_sf,
                    crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass")
@@ -323,8 +327,7 @@ ggplot2::ggplot(data = .) +
   ggplot2::theme_light() +
   ggplot2::labs(title = "Zones are distinguished according to natural conditions",
     x = NULL,
-    y = NULL,
-    caption = "Source: package {geokz}"
+    y = NULL
   )
 
 ```
@@ -424,8 +427,7 @@ get_kaz_oblasts_map() %>%
     ggplot2::labs(title = "Kazakhstan: Administrative units level 1
 (Oblasts & Cities of Republican Significance)",
       x = NULL,
-      y = NULL,
-      caption = "Source: package {geokz}"
+      y = NULL
     )
 ```
 
@@ -435,6 +437,9 @@ get_kaz_oblasts_map() %>%
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
+
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm2_sf) <- 4326L
 
 kaz_adm2_sf %>%
   dplyr::filter(ADM1_EN =="Mangystau") %>%
@@ -452,8 +457,7 @@ kaz_adm2_sf %>%
     ggplot2::labs(title = "Kazakhstan: Mangystau Oblast
 (Rayons & Cities of Oblast Significance)",
       x = NULL,
-      y = NULL,
-      caption = "Source: package {geokz}"
+      y = NULL
     )
 
 
@@ -465,6 +469,10 @@ kaz_adm2_sf %>%
 library(dplyr)
 library(sf)
 library(ggplot2)
+
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm1_sf) <- 4326L
+sf::st_crs(x = kaz_adm2_sf) <- 4326L
 
 ko_bb <-
   dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') %>%
@@ -520,8 +528,7 @@ kaz_adm2_sf %>%
     ggplot2::labs(title = "Kazakhstan: Kyzylorda Oblast
 (Administrative Center, Rayons & City of Republican Significance)",
       x = NULL,
-      y = NULL,
-      caption = "Source: package {geokz}"
+      y = NULL
       )
 
 ```

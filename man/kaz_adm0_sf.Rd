@@ -34,6 +34,9 @@ data("kaz_adm0_sf")
 
 library(sf)
 
+# EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm0_sf) <- 4326L
+
 # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
 # <https://proj.org/operations/projections/lcc.html>
 # First standard parallel - 45 N, Second standard parallel - 51 N,
