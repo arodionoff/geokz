@@ -1,4 +1,4 @@
-citHeader("To cite the 'mapSpain' package in publications use:")
+citHeader("To cite the 'geokz' package in publications use:")
 
 year = format(Sys.time(), "%Y")
 vers = paste('R package version', meta$Version)

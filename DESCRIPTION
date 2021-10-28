@@ -1,14 +1,14 @@
 Type: Package
 Package: geokz
 Title: Offers Various Kazakhstani Maps as Data Frames and 'sf' Objects
-Version: 0.0.0.9022
+Version: 0.0.0.9023
 Authors@R: 
     person(given = "Alexander",
            family = "Rodionov",
            role = c("aut", "cre"),
            email = "a.rodionoff@gmail.com",
            comment = c(ORCID = "0000-0003-2028-5421"))
-Description: Administrative Boundaries of Kazakhstan at several levels
+Description: Geographic coverages of Kazakhstan at several levels
     (Country, Oblasts & Cities of Republican Significance, Rayons of Oblasts &
     City of Oblast Significance) based on the The Bureau of National Statistics
     of the Agency for Strategic Planning and Reforms of the Republic of 

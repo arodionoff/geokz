@@ -10,7 +10,7 @@
                             warning = function(w) return("alpha"),
                             error = function(e) return("alpha"))
   msg <- paste0("geokz ", geokzVersion,
-                "\nAdministrative Boundaries of Kazakhstan as Shapefiles",
+                "\nGeographic coverages of Kazakhstan as ESRI ArcGIS Shapefiles",
                 "\nType citation(\"geokz\") for citing this R package in publications")
 
   if (!interactive())
