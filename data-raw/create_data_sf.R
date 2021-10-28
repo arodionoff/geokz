@@ -15,7 +15,6 @@ kaz_adm0_sf <-
 
 base::Encoding(kaz_adm0_sf$ADM0_KK)
 
-sf::st_crs(x = kaz_adm0_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
 usethis::use_data(kaz_adm0_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # MultiPolygon `sf` object for Kazakhstan's oblasts
@@ -31,7 +30,6 @@ kaz_adm1_sf <-
                    "KZ-YUZ", "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY")
     )
 
-sf::st_crs(x = kaz_adm1_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
 usethis::use_data(kaz_adm1_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # MultiPolygon `sf` object for Kazakhstan's rayons
@@ -55,7 +53,6 @@ kaz_adm2_sf <-
       ISO_3166_2
     )
 
-sf::st_crs(x = kaz_adm2_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
 usethis::use_data(kaz_adm2_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # Point `sf` object for Kazakhstan's oblasts (City - Administrative Center of unit level 1)
@@ -90,7 +87,6 @@ kaz_cnt1_sf$TYPE_CNT1 <-
           substr(kaz_cnt1_sf$KATO, 3, 9) ==   "0000000", # Cities of Republican Significance
           2L, kaz_cnt1_sf$TYPE_CNT1 )
 
-sf::st_crs(x = kaz_cnt1_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
 usethis::use_data(kaz_cnt1_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # Zones Of Kazakhstan according to the natural conditions
