@@ -35,7 +35,8 @@
 #' [package vignette](../doc/making_maps.html#spatial_data) or `vignette("making_maps", package = "geokz")`
 #'
 #' @example inst/examples/kaz_adm0_sf.R
-NULL
+sf::st_crs(x = kaz_adm0_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+
 
 #' @title Map of All Administrative units level 1 (the principal units of a country) of Kazakhstan
 #'
@@ -80,7 +81,8 @@ NULL
 #' [package vignette](../doc/making_maps.html#spatial_data) or `vignette("making_maps", package = "geokz")`
 #'
 #' @example inst/examples/kaz_adm1_sf.R
-NULL
+sf::st_crs(x = kaz_adm1_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+
 
 #' @title Map of All Administrative units level 2 (the district units of principal units) of Kazakhstan
 #'
@@ -135,7 +137,8 @@ NULL
 #'
 #' @example inst/examples/kaz_adm2_sf.R
 #'
-NULL
+sf::st_crs(x = kaz_adm2_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+
 
 #' @title Map of All Administrative centers level 1 of Kazakhstan
 #'
@@ -186,7 +189,8 @@ NULL
 #'
 #' @example inst/examples/kaz_cnt1_sf.R
 #'
-NULL
+sf::st_crs(x = kaz_cnt1_sf) <- 4326L # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+
 
 #' @title Administrative units level 2 of Kazakhstan by Zones according to the natural conditions
 #'
