@@ -61,7 +61,7 @@ NULL
 #'
 #' @format
 #' A `MULTIPOLYGON` data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
-#' `r prettyNum(nrow(geokz::kaz_adm1_sf), big.mark=",")` rows and fields:
+#' `r prettyNum(nrow(geokz::kaz_adm0_sf), big.mark=",")` rows and fields:
 #'   * KATO: Classifier of Administrative Territorial Objects (rus.
 #'       [KATO](https://data.egov.kz/datasets/view?index=kato))
 #'   * ADM0_EN: Name of country on Latin characters

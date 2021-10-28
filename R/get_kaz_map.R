@@ -49,7 +49,7 @@
 #' "+init=epsg:4326" as EPSG number) or `NULL` to get projection for A
 #' **Lambert Conformal Conic (LCC)** with [Krasovsky 1940 ellipsoid](https://en.wikipedia.org/wiki/SK-42_reference_system).  See **Details**.
 #'
-#' @importFrom sf st_transform
+#' @importFrom sf st_crs st_transform
 #'
 #' @return A `sf` object with the requested geographic geometries.
 #'
@@ -131,11 +131,7 @@ get_kaz_oblasts_map <- function(KATO=NULL, ADM1_EN=NULL, ADM1_KK=NULL, ADM1_RU=N
 # If you save an sf-dataframe with a newer version of GDAL, and then try st_transform on a system with an older version
 # of GDAL, the projection info cannot be read properly. The solution is to re-set the projection:
 # EPSG:4326 or WGS84 - World Geodetic System 1984 - see https://github.com/r-spatial/sf/issues/1419
-  df_sf <-
-  sf::st_transform(
-    x = df_sf,
-    crs = 4326L
-  )
+sf::st_crs(x = df_sf) <- 4326L
 
 # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
 # <https://proj.org/operations/projections/lcc.html>
@@ -227,7 +223,7 @@ get_kaz_oblasts_map <- function(KATO=NULL, ADM1_EN=NULL, ADM1_KK=NULL, ADM1_RU=N
 #' "+init=epsg:4326" as EPSG number) or `NULL` to get projection for A
 #' **Lambert Conformal Conic (LCC)** with [Krasovsky 1940 ellipsoid](https://en.wikipedia.org/wiki/SK-42_reference_system).  See **Details**.
 #'
-#' @importFrom sf st_transform
+#' @importFrom sf st_crs st_transform
 #'
 #' @return A `sf` object with the requested geographic geometries.
 #'
@@ -329,11 +325,7 @@ get_kaz_rayons_map <- function(KATO=NULL, ADM1_EN=NULL, ADM1_KK=NULL, ADM1_RU=NU
   # If you save an sf-dataframe with a newer version of GDAL, and then try st_transform on a system with an older version
   # of GDAL, the projection info cannot be read properly. The solution is to re-set the projection:
   # EPSG:4326 or WGS84 - World Geodetic System 1984 - see https://github.com/r-spatial/sf/issues/1419
-  df_sf <-
-    sf::st_transform(
-      x = df_sf,
-      crs = 4326L
-    )
+  sf::st_crs(x = df_sf) <- 4326L
 
   # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
   # <https://proj.org/operations/projections/lcc.html>
