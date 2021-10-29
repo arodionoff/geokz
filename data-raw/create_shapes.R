@@ -15,7 +15,7 @@ sf::st_write(obj = sf::st_zm(kaz_adm1_sf), dsn = 'inst/shape/kaz_admbnda_adm1_20
 
 # ADM2: Administrative units level 2 (the district units of principal units) of Kazakhstan
 load(file = "data/kaz_adm2_sf.rda")
-sf::st_write(obj = kaz_adm2_sf, dsn - 'inst/shape/kaz_admbnda_adm2_2018.shp',
+sf::st_write(obj = kaz_adm2_sf, dsn = 'inst/shape/kaz_admbnda_adm2_2018.shp',
              layer_options = 'ENCODING=UTF-8', delete_layer = TRUE)
 
 # CNT1: Administrative centers level 1 of Kazakhstan
