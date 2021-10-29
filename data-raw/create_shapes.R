@@ -1,4 +1,4 @@
-# Create ESRI ArcView Shapefiles in `shapes` subdirectory with The Administrative units of Kazakhstan
+# Create ESRI ArcGIS Shapefiles in `shapes` subdirectory with The Administrative units of Kazakhstan
 # (*.cpg, *.dbf, *.prj, *.shp, *.shx)
 
 library('sf')               # Simple Features for R

@@ -116,7 +116,7 @@ names(geokz::kaz_cnt1_sf)
 
 Spatial data is provided as administrative regions (polygons) and administrative district (polygons) and region centers (points).
 
-You can use ESRI ArcView shapefiles (\*.cpg, \*.dbf, \*.prj, \*.shp, \*.shx) load as [`shapes`](shapes) subdirectory directly or by coverages:
+You can use ESRI ArcGIS shapefiles (\*.cpg, \*.dbf, \*.prj, \*.shp, \*.shx) load as [`shapes`](shapes) subdirectory directly or by coverages:
 
 * **kaz_admbnda_adm0_2018.shp**: Administrative units level 0 - the boundary of Kazakhstan.
 * **kaz_admbnda_adm1_2018.shp**: Administrative units level 1 - the boundaries of Regions (the Capital, Oblasts and Cities of Republican Significance).

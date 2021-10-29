@@ -103,7 +103,7 @@ library(dplyr)
 # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
 sf::st_crs(x = kaz_adm2_sf) <- 4326L
 
-  ko_bb <-
+ko_bb <-
   dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') %>%
   sf::st_transform(crs = 2501) %>% # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
   sf::st_bbox() %>%
@@ -114,53 +114,51 @@ kaz_adm2_sf %>%
   dplyr::filter(ADM1_EN =="Kyzylorda") %>%
   dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) %>%
   ggplot2::ggplot(data = .) +
-    ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
-      data  = sf::st_geometry(kaz_adm1_sf),
-      color = "red",
-      size  = 1
-    ) +
-    ggplot2::geom_sf(                                           # Rayons of Kyzylorda Oblasts
-      mapping = ggplot2::aes(fill = ADM2_EN)
-      ) +  # forcats::fct_inorder(ADM2_EN)
-    ggplot2::geom_sf_text(                                      # Labels of Rayons
-      data = dplyr::filter(kaz_adm2_sf, (ADM1_EN == 'Kyzylorda' &
-                              magrittr::and(ADM2_EN != "Kyzylorda", ADM2_EN != "Baykonyr"))),
-      mapping = ggplot2::aes(label = ADM2_EN),
-      size = 2.5
-    ) +
-    ggplot2::scale_fill_brewer(palette = "Pastel1") +
-    ggplot2::geom_sf(                     # Administrative Center & City of Republican Significance
-      data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
-      size = 3,
-      col = "red",
-      shape = 19
-    ) +
-    ggplot2::geom_sf_text(                                      # Labels of Cities
-      data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
-      mapping = ggplot2::aes(label = NAME_EN),
-      nudge_x = 65000,
-      nudge_y = -9000,
-      size = 4
-    ) +
-    ggplot2::geom_sf(                                           # Boundaries of Kazakhstan
-      data  = sf::st_geometry(kaz_adm0_sf),
-      alpha  = 0,
-      color = "brown",
-      size  = 2
-    ) +
+  ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
+    data  = sf::st_geometry(kaz_adm1_sf),
+    color = "red",
+    size  = 1
+  ) +
+  ggplot2::geom_sf(                                           # Rayons of Kyzylorda Oblasts
+    mapping = ggplot2::aes(fill = ADM2_EN)
+  ) +  # forcats::fct_inorder(ADM2_EN)
+  ggplot2::geom_sf_text(                                      # Labels of Rayons
+    data = dplyr::filter(kaz_adm2_sf, (ADM1_EN == 'Kyzylorda' &
+                                         magrittr::and(ADM2_EN != "Kyzylorda", ADM2_EN != "Baykonyr"))),
+    mapping = ggplot2::aes(label = ADM2_EN),
+    size = 2.5
+  ) +
+  ggplot2::scale_fill_brewer(palette = "Pastel1") +
+  ggplot2::geom_sf(                     # Administrative Center & City of Republican Significance
+    data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
+    size = 3,
+    col = "red",
+    shape = 19
+  ) +
+  ggplot2::geom_sf_text(                                      # Labels of Cities
+    data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
+    mapping = ggplot2::aes(label = NAME_EN),
+    nudge_x = 65000,
+    nudge_y = -9000,
+    size = 4
+  ) +
+  ggplot2::geom_sf(                                           # Boundaries of Kazakhstan
+    data  = sf::st_geometry(kaz_adm0_sf),
+    alpha  = 0,
+    color = "brown",
+    size  = 2
+  ) +
   # Set new Coordinate System: Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
-    ggplot2::coord_sf(xlim = c(sf::st_bbox(ko_bb)$xmin, sf::st_bbox(ko_bb)$xmax),
-                      ylim = c(sf::st_bbox(ko_bb)$ymin, sf::st_bbox(ko_bb)$ymax),
-                      crs = 2501, expand = FALSE) +
-    ggplot2::theme_linedraw() +
-    ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 2")) +
-    ggplot2::labs(title = "Kazakhstan: Kyzylorda Oblast
+  ggplot2::coord_sf(xlim = c(sf::st_bbox(ko_bb)$xmin, sf::st_bbox(ko_bb)$xmax),
+                    ylim = c(sf::st_bbox(ko_bb)$ymin, sf::st_bbox(ko_bb)$ymax),
+                    crs = 2501, expand = FALSE) +
+  ggplot2::theme_linedraw() +
+  ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 2")) +
+  ggplot2::labs(title = "Kazakhstan: Kyzylorda Oblast
 (Administrative Center, Rayons & City of Republican Significance)",
-      x = NULL,
-      y = NULL,
-      caption = "Source: package {geokz}"
-      )
-
+x = NULL,
+y = NULL
+  )
 }  # The end for {ggplot2} package
 
 
