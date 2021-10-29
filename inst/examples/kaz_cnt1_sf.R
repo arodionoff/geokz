@@ -101,7 +101,10 @@ library(RColorBrewer)
 library(dplyr)
 
 # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm0_sf) <- 4326L
+sf::st_crs(x = kaz_adm1_sf) <- 4326L
 sf::st_crs(x = kaz_adm2_sf) <- 4326L
+sf::st_crs(x = kaz_cnt1_sf) <- 4326L
 
 ko_bb <-
   dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') %>%
