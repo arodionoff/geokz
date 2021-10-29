@@ -117,3 +117,48 @@ testthat::test_that("kaz_admbnda_adm2_2018.shp ESRI ArcGIS for Administrative un
   testthat::expect_s3_class(x$geometry, c("sfc_MULTIPOLYGON", "sfc"))
 
 })
+
+testthat::test_that("kaz_admbnda_cnt1_2019.shp ESRI ArcGIS for Centers of Administrative units level 1
+                    (Oblasts) can be loaded", {
+
+  x <- sf::st_read(system.file("shape/kaz_admbnda_cnt1_2019.shp", package = "geokz"),
+                   "kaz_admbnda_cnt1_2019", crs = 4326L, quiet = TRUE)
+
+  testthat::expect_true(is.data.frame(x))
+  testthat::expect_s3_class(x, "sf")
+  testthat::expect_true(all(sf::st_is_valid(x)))
+
+  # Coordinate Reference System of object
+  # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+  # testthat::expect_warning(sf::st_crs(x = x) <- 4326L, NA)
+  testthat::expect_silent(x <-
+                            sf::st_transform(x = x,
+                                             crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass"))
+  testthat::expect_equal(sf::st_crs(x)$input, "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass")
+  testthat::expect_silent(x <- sf::st_transform(x = x, crs = "EPSG:4326"))
+
+  # structure of datasets...
+  testthat::expect_equal(nrow(x), 18L)
+  testthat::expect_equal(ncol(x), 15L)
+  testthat::expect_equal(colnames(x), c("KATO",
+                                        "ADM0_EN", "ADM0_KK", "ADM0_RU", "ADM0_PCODE",
+                                        "ADM1_EN", "ADM1_KK", "ADM1_RU", "ADM1_PCODE",
+                                        "TYPE_CNT1", "ISO_3166_2",
+                                        "NAME_EN", "NAME_KK", "NAME_RU","geometry"))
+  testthat::expect_type(x$KATO,       "character")
+  testthat::expect_type(x$ADM0_EN,    "character")
+  testthat::expect_type(x$ADM0_KK,    "character")
+  testthat::expect_type(x$ADM0_RU,    "character")
+  testthat::expect_type(x$ADM0_PCODE, "character")
+  testthat::expect_type(x$ADM1_EN,    "character")
+  testthat::expect_type(x$ADM1_KK,    "character")
+  testthat::expect_type(x$ADM1_RU,    "character")
+  testthat::expect_type(x$ADM1_PCODE, "character")
+  testthat::expect_type(x$TYPE_CNT1,  "integer")
+  testthat::expect_type(x$ISO_3166_2, "character")
+  testthat::expect_type(x$NAME_EN,    "character")
+  testthat::expect_type(x$NAME_KK,    "character")
+  testthat::expect_type(x$NAME_RU,    "character")
+  testthat::expect_s3_class(x$geometry, c("sfc_POINT", "sfc"))
+
+})

@@ -159,7 +159,7 @@ testthat::test_that("geokz::kaz_cnt1_sf dataset for Centers of Administrative un
   testthat::expect_type(x$NAME_EN,    "character")
   testthat::expect_type(x$NAME_KK,    "character")
   testthat::expect_type(x$NAME_RU,    "character")
-  testthat::expect_s3_class(x$geometry, c("sfc_MULTIPOLYGON", "sfc"))
+  testthat::expect_s3_class(x$geometry, c("sfc_POINT", "sfc"))
 
 })
 
