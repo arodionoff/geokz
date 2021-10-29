@@ -1,4 +1,4 @@
-# context("Testing function `get_kaz_oblasts_map()` with georaphic coverages") `context()` was deprecated in the 3rd edition
+# context("Testing function `get_kaz_oblasts_map()` with geographic coverage") `context()` was deprecated in the 3rd edition
 
 testthat::test_that("Get Oblasts & Cities of Republican Significance of Kazakhstan
                     as `sf` polygons for Administrative units level 1

@@ -1,4 +1,4 @@
-# context("Testing dataframes with georaphic coverages") `context()` was deprecated in the 3rd edition.
+# context("Testing dataframes with geographic coverage") `context()` was deprecated in the 3rd edition.
 
 testthat::test_that("geokz::kaz_adm0_sf dataset for Administrative units level 0
                      (country) can be loaded", {
