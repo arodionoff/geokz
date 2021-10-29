@@ -15,6 +15,10 @@ kaz_adm0_sf <-
 
 base::Encoding(kaz_adm0_sf$ADM0_KK)
 
+# Coordinate Reference System of object - sf::sf_extSoftVersion()
+# EPSG:4326 or WGS84 for older version GDAL - see https://github.com/r-spatial/sf/issues/1419
+sf::st_crs(x = kaz_adm0_sf) <- 4326L
+
 usethis::use_data(kaz_adm0_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # MultiPolygon `sf` object for Kazakhstan's oblasts

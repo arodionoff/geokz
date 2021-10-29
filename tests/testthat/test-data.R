@@ -6,12 +6,20 @@ testthat::test_that("geokz::kaz_adm0_sf dataset for Administrative units level 0
   # load(paste0("data/", "kaz_adm0_sf.rda"))
   x <- geokz::kaz_adm0_sf
 
+  # Coordinate Reference System of object
+  # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
+  # testthat::expect_silent(sf::st_crs(x = x) <- 4326L)
+  testthat::expect_silent(x <-
+                            sf::st_transform(x = x,
+                                    crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass"))
+
   testthat::expect_true(is.data.frame(x))
   testthat::expect_s3_class(x, "sf")
 
   testthat::expect_equal(nrow(x), 1L)
-  testthat::expect_equal(sf::st_crs(x)$input, "WGS 84")
+  testthat::expect_equal(sf::st_crs(x)$input, "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass")
   testthat::expect_true(all(sf::st_is_valid(x)))
+  testthat::expect_silent(x <- sf::st_transform(x = x, crs = "EPSG:4326"))
 
   # structure of datasets...
   testthat::expect_equal(ncol(x), 6L)
