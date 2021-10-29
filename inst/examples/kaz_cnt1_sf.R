@@ -124,7 +124,7 @@ kaz_adm2_sf %>%
   ) +  # forcats::fct_inorder(ADM2_EN)
   ggplot2::geom_sf_text(                                      # Labels of Rayons
     data = dplyr::filter(kaz_adm2_sf, (ADM1_EN == 'Kyzylorda' &
-                                         magrittr::and(ADM2_EN != "Kyzylorda", ADM2_EN != "Baykonyr"))),
+                                    magrittr::and(ADM2_EN != "Kyzylorda", ADM2_EN != "Baykonyr"))),
     mapping = ggplot2::aes(label = ADM2_EN),
     size = 2.5
   ) +
