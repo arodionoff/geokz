@@ -412,7 +412,7 @@ tmap::tm_graticules(lines = FALSE) +
 
 See use [{tmap} & {leaflet} packages](../html/kaz_cnt1_sf.html#tmap_view) for draw of Interactive Maps as `sf` objects.
 
-### Package {ggplot2}: Flexibility in each of the layers and many aspects of visualisation
+### Package **{ggplot2}**: Flexibility in each of the layers and many aspects of visualisation
 
 #### Kazakhstan: Administrative units level 1 (Oblasts & Cities of Republican Significance)
 
@@ -545,7 +545,7 @@ kaz_adm2_sf %>%
 
 ```
 
-### Package {leaflet}: Interactive map widget using **htmlwidgets**
+### Package **{leaflet}**: Interactive map widget using **<i>htmlwidgets</i>**
 
 #### Interactive Map of Kazakhstan with the Capitals
 
