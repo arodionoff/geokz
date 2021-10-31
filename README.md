@@ -12,7 +12,7 @@ This project downloads a set of shapefiles relevant to the Republic of Kazakhsta
 
 `devtools::install_github("arodionoff/geokz")`
 
-Vignette [*Making maps using {geokz}-package*](vignettes/making_maps.Rmd) provides multiple real-world examples of their usage.
+Vignette [*Making maps using {geokz}-package*](https://rpubs.com/A_Rodionoff/geokz) provides multiple real-world examples of their usage.
 
 To use vignettes, you should use the installation with vignettes compilation: `devtools::install_github("arodionoff/geokz", build_vignettes = TRUE)`.
 
