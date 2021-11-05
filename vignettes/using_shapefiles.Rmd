@@ -1,0 +1,262 @@
+---
+title: "Loading shape files using R & Python"
+author: "Alexander Rodionov"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Loading shape files using R & Python}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = FALSE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+packages <- c("devtools", "testthat", "dplyr", "ggplot2", "sf", "magrittr", "RColorBrewer", "leaflet", "tmap", "usethis", "reticulate")
+utils::install.packages(base::setdiff(packages, base::rownames(utils::installed.packages())))   # R ver. 3.6.2
+
+library(geokz)
+```
+
+**`geokz`-package provides access to multiple dataset of different types and for different use. In this vignette we introduce the different datas and explain their use cases. Vignette *Making maps using {geokz}-package* provides multiple real-world examples of their usage.**
+
+## Package installation {#package_installation}
+
+`geokz` can be installed from GitHUB using.
+
+```{r, eval = FALSE}
+# Install development version from GitHub
+devtools::install_github("arodionoff/geokz")
+
+# Install development version from GitHub with vignette
+devtools::install_github("arodionoff/geokz", build_vignettes = TRUE)
+```
+
+## Load shape file with Administrative units level 1
+
+Kazakhstan is divided into 14 regions (Kazakh: облыстар/oblystar; singular: облыс/oblys; Russian: области/oblasti; singular: область/oblast' ).
+
+```{r kaz_adm1_sf}
+library(geokz)
+library(dplyr)
+library(sf)
+
+IQR <- data(package = "geokz")
+dplyr::as_tibble(IQR$results) %>% 
+  dplyr::select(Item, Title) %>% 
+    dplyr::filter(row_number() != n()) %>% # drop on `natural_zones` w/o shapefile
+      dplyr::transmute(File = list.files(path = system.file("shape", package = "geokz"), pattern = "*.shp"),
+                       Item, Title)
+
+shpfile <- 
+  system.file("shape", "kaz_admbnda_adm1_2018.shp", package = "geokz")
+
+kaz_ADM1_sf <- 
+  sf::st_read(dsn = shpfile)
+
+print(sf::st_crs(kaz_ADM1_sf))
+
+glimpse(kaz_ADM1_sf)
+```
+
+Load geographic coverage by Oblasts of the country from shapefiles in subdirectory `shape`.
+
+```{r kaz_adm1_sf_key_count}
+kaz_ADM1_sf %>%
+  sf::st_drop_geometry() %>% 
+    dplyr::count(ADM1_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ISO_3166_2)
+```
+
+With these Oblast keys you can easily filter Oblasts for plotting or you can list different regional (Multi-Oblast) breakdowns.
+
+```{r plot map, fig.height = 4, fig.width = 7}
+
+kaz_ADM1_sf <- 
+  kaz_ADM1_sf %>% 
+    dplyr::mutate(Regions = dplyr::case_when(
+      ADM1_PCODE %in% c("KZ11", "KZ39", "KZ55", "KZ59", "KZ71") ~ "North",
+      ADM1_PCODE %in% c("KZ15", "KZ23", "KZ27", "KZ47")         ~ "West",
+      ADM1_PCODE == "KZ35"                                      ~ "Center",
+      ADM1_PCODE == "KZ63"                                      ~ "East",
+      TRUE                                                      ~ "South"      
+    ) %>% 
+      factor(., levels = c("North", "West", "Center", "East", "South")))
+
+tmap::qtm(
+  shp = kaz_ADM1_sf, 
+  fill = "Regions", 
+  text = "ADM1_EN",
+  fill.palette = "Set3",
+  title = "Regions of Kazakhstan",
+  projection = 2502L)   # Pulkovo 1942 / Gauss-Kruger CM 69E. See <https://epsg.io/2502>.
+
+```
+
+If necessary, a similar operation can be performed in **Python**.
+
+```{r Config Python}
+#======================================================================
+# Starting Python throu package `reticulate`
+#======================================================================
+
+library('reticulate')       # Interface to 'Python'
+
+# reticulate::conda_install(envname  = 'r-reticulate', packages = c('pandas', 'lightgbm'))
+reticulate::miniconda_path()
+reticulate::use_miniconda()
+# reticulate::use_virtualenv('D:/Program Files/Python/venvs/ml_python_37', required = TRUE)
+reticulate::py_discover_config()
+
+reticulate::conda_list()
+```
+
+If the required packages are not available, then they should be installed in the required ``Python`` instance. **{GeoPandas}** depends on the following packages:
+
+* ``pandas`` - operations with dataframe.
+* ``shapely`` - analysis and manipulation of geometry features.
+* ``fiona`` -  read and write dataframe using multi-layered GIS formats.
+* ``pyproj`` - Python interface to PROJ (cartographic projections and coordinate transformations library).
+
+``fiona``, in turn, depends on ``attrs``, ``click``, ``cliji``, ``click_plugins``, ``munch`` and, of couse, ``GDAL`` packages.
+
+```{bash Install libs into Python, eval=FALSE, include=FALSE}
+# ```{bash}
+
+c:
+cd C:/Users/arodionov/AppData/Local/r-miniconda/envs/r-reticulate
+pip install pandas
+pip install geopandas
+
+pip show GDAL fiona attrs pyproj shapely geopandas matplotlib
+
+```
+
+Further, ``matplotlib`` is an optional dependency, required for plotting, and [``rtree``](https://github.com/Toblerity/rtree) is an optional dependency, required for spatial joins. ``rtree`` requires the C library [``libspatialindex``](https://github.com/libspatialindex/libspatialindex).
+
+Let's open the **Python** packages required for this task and read shapefiles.
+
+```{python Load Libs & Data, engine.path="C:/Users/arodionov/AppData/Local/r-miniconda/envs/r-reticulate/python.exe"}
+# ```{python}
+
+#======================================================================
+# Loading libraries in Python
+#======================================================================
+
+import sys
+print(f'\nPython Ver. =  {sys.version}')
+
+# importing necessary libraries
+# import numpy as np
+import pandas as pd
+import geopandas as gpd
+
+gpd.show_versions()
+
+# import requests
+# import uuid
+# import fiona
+# from osgeo import gdal
+# 
+# request = requests.get('https://github.com/OSGeo/gdal/blob/trunk/autotest/ogr/data/poly.zip?raw=true')
+# vsiz = '/vsimem/{}.zip'.format(uuid.uuid4().hex) # gdal/ogr requires a .zip extension
+# 
+# gdal.FileFromMemBuffer(vsiz,bytes(request.content))
+# with fiona.Collection(vsiz, vsi='zip', layer ='poly') as f:
+#     gdf = gpd.GeoDataFrame.from_features(f, crs=f.crs)
+#     print(gdf.head())
+
+#======================================================================
+# Loading geographic coverage in Python
+#======================================================================
+
+kaz_ADM1_gdf = gpd.read_file(r.shpfile, driver = 'ESRI Shapefile', encoding = 'utf-8')
+
+# # open the file
+# file = open("https://github.com/arodionoff/geokz/blob/main/inst/shape/kaz_admbnda_adm1_2018.zip", "rb")
+# # see https://geopandas.readthedocs.io/en/latest/docs/user_guide/io.html#reading-spatial-data
+# kaz_ADM1_gdf = gpd.read_file(file)
+
+# kaz_ADM1_gdf = gpd.read_file('/vsicurl/https://github.com/arodionoff/geokz/blob/main/inst/shape/kaz_admbnda_adm1_2018.shp?raw=true')
+
+# Get Projection of GeoDataFrame
+kaz_ADM1_gdf.crs
+print(kaz_ADM1_gdf)
+
+```
+
+Let's open the **Python**'s ``matplotlib`` package required for visualization and show a map of the regions of Kazakhstan.
+
+```{python Show Map}
+# ```{python}
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+# Categories in legends produced by geopandas are sorted and this is hardcoded
+# https://stackoverflow.com/questions/54370302/changing-the-order-of-entries-for-a-geopandas-choropleth-map-legend
+
+# Set Number Code for Regions and Customer Legend
+kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ11') | 
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ39') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ55') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ59') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ71'), 'Regions'] = 0  # 'North'
+kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ15') | 
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ23') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ27') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ47'), 'Regions'] = 1  # 'West'
+kaz_ADM1_gdf.loc[kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ35', 'Regions']   = 2  # 'Center'
+kaz_ADM1_gdf.loc[kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ63', 'Regions']   = 3  # 'East'
+kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ19') | 
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ31') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ43') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ61') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ75') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ79'), 'Regions'] = 4  # 'South'
+
+#Re-Projection
+kaz_ADM1_gdf = kaz_ADM1_gdf.to_crs(epsg = 2502)  # Pulkovo 1942 / Gauss-Kruger CM 69E. See <https://epsg.io/2502>
+kaz_ADM1_gdf.crs
+
+# Create color dictionaries for Regions- Set colors for Customer Palette in R: tmaptools::get_brewer_pal("Set3", n = 5)
+palette_symb = {0: '#8DD3c7', 1: '#FFFFB3', 2: '#BEBADA', 3: '#FB8072', 4: '#80B1D3'}
+regions_symb={0: 'North', 1: 'West', 2: 'Center', 3: 'East', 4: 'South'}
+
+# Plot data
+fig, ax = plt.subplots(figsize=(7, 4))
+
+kaz_ADM1_gdf.plot(
+  # column = 'Regions',
+  # cmap = 'Set3',
+  color = kaz_ADM1_gdf['Regions'].map(palette_symb),
+  edgecolor = 'black',
+  linewidth = 0.15,
+  categorical = True,
+  legend = False,
+  ax = ax
+  )
+
+kaz_ADM1_gdf.apply(lambda x: ax.annotate(text=x.ADM1_EN, xy=x.geometry.centroid.coords[0], ha='center', size=9), axis=1)
+
+# Create Customer Legend for Category Legend
+# see https://matplotlib.org/stable/gallery/text_labels_and_annotations/custom_legends.html
+legend_elements = []
+for x in range(4):
+    legend_elements.append(patches.Patch(facecolor=palette_symb[x],
+                                         edgecolor='black',
+                                         label=regions_symb[x]))
+    
+ax.legend(handles=legend_elements, bbox_to_anchor=(1.1, 1.1), title='Regions', prop={'size': 9})
+ax.set(title = 'Regions of Kazakhstan')
+ax.set_axis_off()
+
+plt.show()
+
+```
+

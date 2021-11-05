@@ -1,11 +1,11 @@
 Type: Package
 Package: geokz
 Title: Offers Various Kazakhstani Maps as Data Frames and 'sf' Objects
-Version: 0.0.0.9037
+Version: 0.0.0.9040
 Authors@R: 
     person(given = "Alexander",
            family = "Rodionov",
-           role = c("aut", "cre"),
+           role = c("cre"),
            email = "a.rodionoff@gmail.com",
            comment = c(ORCID = "0000-0003-2028-5421"))
 Description: Geographic coverages of Kazakhstan at several levels
@@ -35,7 +35,8 @@ Suggests:
     ggplot2,
     leaflet,
     knitr,
-    rmarkdown
+    rmarkdown,
+    reticulate
 VignetteBuilder:
     knitr
 LazyData: true

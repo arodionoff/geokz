@@ -13,7 +13,7 @@ editor_options:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
+  collapse = FALSE,
   comment = "#>"
 )
 ```
@@ -29,14 +29,14 @@ library(geokz)
 
 ## Package installation {#package_installation}
 
-`geokz` can be installed from CRAN using
+`geokz` can be installed from GitHUB using
 
 ```{r, eval = FALSE}
-# install from CRAN
-install.packages("geokz")
-
 # Install development version from GitHub
-remotes::install_github("arodionoff/geokz")
+devtools::install_github("arodionoff/geokz")
+
+# Install development version from GitHub with vignette
+devtools::install_github("arodionoff/geokz", build_vignettes = TRUE)
 ```
 
 ## Administrative units level 1 keys
@@ -54,7 +54,7 @@ dplyr::as_tibble(IQR$results) %>%
     dplyr::filter(grepl("kaz_adm1_sf", Item))
 ```
 
-Looking at the names of `kaz_adm2_sf` there is `r prettyNum( ncol(geokz::kaz_adm2_sf) )` different variables from each rayons
+Looking at the names of `kaz_adm1_sf` there is `r prettyNum( ncol(geokz::kaz_adm1_sf) )` different variables from each Oblast.
 
 ```{r kaz_adm1_sf_names}
 names(geokz::kaz_adm1_sf)
