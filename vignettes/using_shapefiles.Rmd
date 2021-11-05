@@ -179,7 +179,7 @@ gpd.show_versions()
 kaz_ADM1_gdf = gpd.read_file(r.shpfile, driver = 'ESRI Shapefile', encoding = 'utf-8')
 
 # # open the file
-# file = open("https://github.com/arodionoff/geokz/blob/main/inst/shape/kaz_admbnda_adm1_2018.zip", "rb")
+# file = open('https://github.com/arodionoff/geokz/blob/main/inst/shape/kaz_admbnda_adm1_2018.zip', 'rb')
 # # see https://geopandas.readthedocs.io/en/latest/docs/user_guide/io.html#reading-spatial-data
 # kaz_ADM1_gdf = gpd.read_file(file)
 
