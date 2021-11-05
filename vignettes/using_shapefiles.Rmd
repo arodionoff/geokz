@@ -1,9 +1,9 @@
 ---
-title: "Loading shape files using R & Python"
+title: "Using shape files R & Python"
 author: "Alexander Rodionov"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Loading shape files using R & Python}
+  %\VignetteIndexEntry{Using shape files with R & Python}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -25,7 +25,7 @@ utils::install.packages(base::setdiff(packages, base::rownames(utils::installed.
 library(geokz)
 ```
 
-**`geokz`-package provides access to multiple dataset of different types and for different use. In this vignette we introduce the different datas and explain their use cases. Vignette *Making maps using {geokz}-package* provides multiple real-world examples of their usage.**
+`geokz`-package provides access to multiple dataset of different types and for different use. In this vignette we introduce the different datas and explain their use cases. Vignette *Using shape files with R & Python* provides multiple real-world examples using shapefiles with **R** and **Python**.
 
 ## Package installation {#package_installation}
 
