@@ -108,10 +108,14 @@ If necessary, a similar operation can be performed in **Python**.
 
 library('reticulate')       # Interface to 'Python'
 
+# options(rstudio.python.installationPath = "D:/Python/Anaconda3")
+# Sys.setenv(RETICULATE_MINICONDA_PATH = "D:/Python/Miniconda3")
+# Sys.setenv(RETICULATE_MINICONDA_PATH = "D:/Python/Anaconda3")
+# reticulate::install_miniconda(path = miniconda_path(), update = TRUE, force = FALSE)
 # reticulate::conda_install(envname  = 'r-reticulate', packages = c('pandas', 'geopandas'))
 reticulate::miniconda_path()
 # reticulate::use_miniconda()
-reticulate::use_condaenv('D:\\Python\\Miniconda3\\envs\\r-reticulate', required = TRUE)
+# reticulate::use_condaenv('D:\\Python\\Anaconda3\\envs\\r-reticulate', required = TRUE)
 reticulate::py_discover_config()
 
 reticulate::conda_list()
@@ -249,7 +253,7 @@ kaz_ADM1_gdf.apply(lambda x: ax.annotate(text=x.ADM1_EN, xy=x.geometry.centroid.
 # Create Customer Legend for Category Legend
 # see https://matplotlib.org/stable/gallery/text_labels_and_annotations/custom_legends.html
 legend_elements = []
-for x in range(4):
+for x in range(len(regions_symb)):
     legend_elements.append(patches.Patch(facecolor=palette_symb[x],
                                          edgecolor='black',
                                          label=regions_symb[x]))
