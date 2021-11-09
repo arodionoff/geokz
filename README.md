@@ -45,9 +45,10 @@ If the required packages are not available, then they should be installed in the
 * ``shapely`` - analysis and manipulation of geometry features.
 * ``fiona`` -  read and write dataframe using multi-layered GIS formats.
 * ``pyproj`` - Python interface to PROJ (cartographic projections and coordinate transformations library).
-* ``matlabplot`` - a comprehensive library for creating static, animated, and interactive visualizations in Python.
 
 ``fiona``, in turn, depends on ``attrs``, ``click``, ``cliji``, ``click_plugins``, ``munch`` and, of couse, ``GDAL`` packages.
+
+* ``matlabplot`` - a comprehensive library for creating static, animated, and interactive visualizations in Python.
 
 ```
 import sys
