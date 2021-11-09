@@ -48,7 +48,7 @@ If the required packages are not available, then they should be installed in the
 
 ``fiona``, in turn, depends on ``attrs``, ``click``, ``cliji``, ``click_plugins``, ``munch`` and, of couse, ``GDAL`` packages.
 
-* ``matlabplot`` - a comprehensive library for creating static, animated, and interactive visualizations in Python.
+``matlabplot`` is a comprehensive library for creating static, animated, and interactive visualizations in Python.
 
 ```
 import sys
