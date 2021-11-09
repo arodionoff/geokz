@@ -1,4 +1,4 @@
-# geokz 0.0.0.939
+# geokz 0.0.0.944
 
 ## New features
 

@@ -234,7 +234,7 @@ kaz_ADM1_gdf.crs
 palette_symb = {0: '#8DD3c7', 1: '#FFFFB3', 2: '#BEBADA', 3: '#FB8072', 4: '#80B1D3'}
 regions_symb={0: 'North', 1: 'West', 2: 'Center', 3: 'East', 4: 'South'}
 
-# Plot data
+# Plot Geographic Coverage
 fig, ax = plt.subplots(figsize=(7, 4))
 
 kaz_ADM1_gdf.plot(
