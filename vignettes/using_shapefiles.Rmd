@@ -118,7 +118,7 @@ reticulate::miniconda_path()
 # reticulate::use_condaenv('D:\\Python\\Anaconda3\\envs\\r-reticulate', required = TRUE)
 reticulate::py_discover_config()
 
-reticulate::conda_list()
+# reticulate::conda_list()  # if conda is not exist Error
 ```
 
 If the required packages are not available, then they should be installed in the required ``Python`` instance. **{GeoPandas}** depends on the following packages:
