@@ -89,6 +89,8 @@ shp2_sf <-
   # Восстановления изначальной проекции WGS84 - World Geodetic System 1984, used in GPS
   sf::st_transform(., crs = '+init=epsg:4326' )
 
+attr(shp2_sf, 'agr') <- NULL   # Remove attributes of Agreggate function
+
 # For Example
 tmap::tm_shape( shp2_sf, bbox = dplyr::filter(shp2_sf, ADM2_PCODE == 'KZ475200') %>% sf::st_bbox() ) +
   tmap::tm_fill('ADM2_PCODE') +

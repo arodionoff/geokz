@@ -1,3 +1,9 @@
+# geokz 0.0.0.948
+
+## Minor improvements and bug fixes
+
+* Fixed bugs and mistakes in `kaz_adm2_sf` geographic coverage and `kaz_admbnda_adm2_2018.shp` shapefile.
+
 # geokz 0.0.0.946
 
 ## New features
@@ -10,7 +16,7 @@
 
 * Fixed bugs and mistakes in texts.
 
-# gt 0.0.0.9037
+# geokz 0.0.0.9037
 
 This release focuses on two main areas:
 
