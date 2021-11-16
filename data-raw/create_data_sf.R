@@ -55,7 +55,8 @@ kaz_adm2_sf <-
       ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE,
       ADM2_EN, ADM2_KK, ADM2_RU, ADM2_PCODE,
       ISO_3166_2
-    )
+    ) %>%
+    dplyr::arrange(KATO)  # Change order of Turkistani Cities
 
 usethis::use_data(kaz_adm2_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
