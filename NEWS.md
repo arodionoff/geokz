@@ -1,4 +1,4 @@
-# geokz 0.0.0.952
+# geokz 0.0.0.951
 
 ## Minor improvements
 
