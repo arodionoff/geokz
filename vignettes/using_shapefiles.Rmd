@@ -58,8 +58,13 @@ dplyr::as_tibble(IQR$results) %>%
 shpfile <- 
   system.file("shape", "kaz_admbnda_adm1_2018.shp", package = "geokz")
 
+# agr - attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry
+agr = c(KATO = "identity", ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant",
+        ADM1_EN = "identity", ADM1_KK = "identity", ADM1_RU = "identity", ADM1_PCODE = "identity",
+        ISO_3166_2 = "identity")
+
 kaz_ADM1_sf <- 
-  sf::st_read(dsn = shpfile)
+  sf::st_read(dsn = shpfile, agr)
 
 print(sf::st_crs(kaz_ADM1_sf))
 

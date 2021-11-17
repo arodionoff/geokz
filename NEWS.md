@@ -1,8 +1,8 @@
-# geokz 0.0.0.951
+# geokz 0.0.0.952
 
 ## Minor improvements
 
-* Add attributes `agr` into shapefiles and geographic coverages for correct aggregation of spatial features.
+* Add attributes `agr` into geographic coverages for correct aggregation of spatial features.
 
 # geokz 0.0.0.950
 
