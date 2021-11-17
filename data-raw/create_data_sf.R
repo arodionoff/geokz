@@ -6,7 +6,10 @@ library('dplyr')            # A Grammar of Data Manipulation
 library('magrittr')         # A Forward-Pipe Operator for R
 
 # MultiPolygon `sf` object for Kazakhstan country (Administrative unit level 0 - Country) in `UTF-8` encoding
-kaz_adm0_sf <- sf::st_read('maps/kaz_admbnda_adm0_2019.shp')    # Create 'sf' class from package 'sf'
+
+agr = c(ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant")
+
+kaz_adm0_sf <- sf::st_read('maps/kaz_admbnda_adm0_2019.shp', agr = agr)    # Create 'sf' class from package 'sf'
 kaz_adm0_sf <-
   dplyr::transmute( kaz_adm0_sf,
                     KATO       = "000000000",
@@ -19,11 +22,18 @@ base::Encoding(kaz_adm0_sf$ADM0_KK)
 # EPSG:4326 or WGS84 for older version GDAL - see https://github.com/r-spatial/sf/issues/1419
 sf::st_crs(x = kaz_adm0_sf) <- 4326L
 
+sf::st_agr(kaz_adm0_sf) <-
+  factor( x = c(KATO = "identity", agr)
+          , levels = c("constant", "aggregate", "identity") )
+
 usethis::use_data(kaz_adm0_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # MultiPolygon `sf` object for Kazakhstan's oblasts
 # Administrative unit level 1 - the largest subnational unit of a country
-kaz_adm1_sf <- sf::st_read('maps/kaz_admbnda_adm1_2019.shp')    # Create 'sf' class from package 'sf'
+agr = c(ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant",
+        ADM1_EN = "identity", ADM1_KK = "identity", ADM1_RU = "identity", ADM1_PCODE = "identity")
+
+kaz_adm1_sf <- sf::st_read('maps/kaz_admbnda_adm1_2019.shp', agr = agr)    # Create 'sf' class from package 'sf'
 
 kaz_adm1_sf <-
   dplyr::transmute( kaz_adm1_sf,
@@ -34,11 +44,20 @@ kaz_adm1_sf <-
                    "KZ-YUZ", "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY")
     )
 
+sf::st_agr(kaz_adm1_sf) <-
+  factor( x = c(KATO = "identity", agr, ISO_3166_2 = "identity")
+        , levels = c("constant", "aggregate", "identity") )
+
 usethis::use_data(kaz_adm1_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # MultiPolygon `sf` object for Kazakhstan's rayons
 # Administrative unit level 2 - the secondary subnational unit of a country
-kaz_adm2_sf <- sf::st_read('maps/kaz_admbnda_adm2_2021.shp')    # Create 'sf' class from package 'sf'
+
+agr = c(ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant",
+        ADM1_EN = "constant", ADM1_KK = "constant", ADM1_RU = "constant", ADM1_PCODE = "constant",
+        ADM2_EN = "identity", ADM2_KK = "identity", ADM2_RU = "identity", ADM2_PCODE = "identity")
+
+kaz_adm2_sf <- sf::st_read('maps/kaz_admbnda_adm2_2021.shp', agr = agr)    # Create 'sf' class from package 'sf'
 # kaz_adm2_sf <-                                                 # 26 times more slower
 #   sf::st_join( x = kaz_adm2_sf,
 #                y = dplyr::select(kaz_adm1_sf, ISO_3166_2),
@@ -58,10 +77,17 @@ kaz_adm2_sf <-
     ) %>%
     dplyr::arrange(KATO)  # Change order of Turkistani Cities
 
+sf::st_agr(kaz_adm2_sf) <-
+  factor( x = c(KATO = "identity", agr, ISO_3166_2 = "constant")
+        , levels = c("constant", "aggregate", "identity") )
+
 usethis::use_data(kaz_adm2_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 # Point `sf` object for Kazakhstan's oblasts (City - Administrative Center of unit level 1)
-kaz_cnt1_sf <- sf::st_read('maps/kaz_admcntr_adm1_2018.shp')  # Create 'sf' class from package 'sf'
+
+agr = c(KATO = "identity", NAME_KK = "identity", NAME_RU = "identity", NAME_EN = "identity")
+
+kaz_cnt1_sf <- sf::st_read('maps/kaz_admcntr_adm1_2018.shp', agr = agr)  # Create 'sf' class from package 'sf'
 kaz_cnt1_sf <-
   dplyr::mutate( kaz_cnt1_sf,
       TYPE_CNT1 = dplyr::case_when(  # c(rep(3L, times = 14L), 1L, 2L, 2L, 4L),
@@ -91,6 +117,13 @@ kaz_cnt1_sf$TYPE_CNT1 <-
   ifelse( kaz_cnt1_sf$KATO != "710000000" & # Nur-Sultan - The Capital
           substr(kaz_cnt1_sf$KATO, 3, 9) ==   "0000000", # Cities of Republican Significance
           2L, kaz_cnt1_sf$TYPE_CNT1 )
+
+sf::st_agr(kaz_cnt1_sf) <-
+  factor( x = c(KATO = "identity", ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant",
+                ADM1_EN = "identity", ADM1_KK = "identity", ADM1_RU = "identity", ADM1_PCODE = "identity",
+                TYPE_CNT1 = "identity", ISO_3166_2 = "identity",
+                NAME_EN = "identity", NAME_KK = "identity", NAME_RU = "identity")
+        , levels = c("constant", "aggregate", "identity") )
 
 usethis::use_data(kaz_cnt1_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
