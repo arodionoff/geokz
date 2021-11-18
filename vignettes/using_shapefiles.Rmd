@@ -31,7 +31,7 @@ library(geokz)
 
 `geokz` can be installed from GitHUB using.
 
-```{r, eval = FALSE}
+```{r eval=FALSE, include=FALSE}
 # Install development version from GitHub
 devtools::install_github("arodionoff/geokz")
 
@@ -64,7 +64,7 @@ agr = c(KATO = "identity", ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU =
         ISO_3166_2 = "identity")
 
 kaz_ADM1_sf <- 
-  sf::st_read(dsn = shpfile, agr)
+  sf::st_read(dsn = shpfile, agr = agr)
 
 print(sf::st_crs(kaz_ADM1_sf))
 
