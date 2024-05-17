@@ -31,7 +31,7 @@ tmap::tm_polygons(
   border.col = "black",
   border.alpha = 0.3,
   title = "Administrative \nunits level 1",
-  labels = kaz_adm1_sf$ADM1_KK,
+  labels = kaz_adm1_sf$ADM1_EN,
   palette = c("coral", "orange", "green", "blue")
 ) +
 tmap::tm_text("ADM1_EN", col = "gray10", size = 0.9, shadow = TRUE) +
@@ -58,10 +58,11 @@ library(dplyr)
 kaz_adm1_sf %>%
   dplyr::mutate(ADM1_EN = factor(ADM1_EN, levels = ADM1_EN)) %>%
   ggplot2::ggplot(data = .) +
-    ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM1_EN)) +  # forcats::fct_inorder(ADM1_EN)
+    ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM1_EN)) +
     ggplot2::geom_sf_text(mapping = ggplot2::aes(label = ADM1_EN)) +
     ggplot2::theme_bw() +
-    ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 1")) +
+    ggplot2::guides(fill = ggplot2::guide_legend(
+                                    title = "Administrative \nunits level 1")) +
     ggplot2::labs(title = "Kazakhstan: Administrative units level 1
 (Oblasts & Cities of Republican Significance)",
       x = NULL,
@@ -90,7 +91,7 @@ library(magrittr)
 
 points <-
   data.frame(
-    name = c("Nur-Sultan", "Almaty"),
+    name = c("Astana", "Almaty"),
     branch = c("The Capital", "The Biggest City"),
     link = c("https://en.wikipedia.org/wiki/Nur-Sultan",
              "https://en.wikipedia.org/wiki/Almaty"),
@@ -111,7 +112,8 @@ epsg102027 <- leaflet::leafletCRS(
   resolutions = 2^(16:7))
 
 leaflet::leaflet(
-  kaz_adm1_sf %>% sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>% sf::st_zm(geometry),
+  geokz::kaz_adm1_sf %>% sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
+                            sf::st_zm(geometry),
   options = leafletOptions(crs = epsg102027)
   ) %>%
   leaflet::addPolygons(

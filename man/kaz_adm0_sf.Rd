@@ -5,7 +5,8 @@
 \alias{kaz_adm0_sf}
 \title{Map of Administrative units level 0 (The the boundaries of a Kazakhstan)}
 \format{
-A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
+A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or
+WGS84 - World Geodetic System 1984) object with
 1 rows and fields:
 \itemize{
 \item KATO: Classifier of Administrative Territorial Objects (rus.
@@ -18,9 +19,9 @@ A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - W
 }
 }
 \source{
-\url{https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy}, files
-\code{kaz_admbnda_adm0_2019.shp}, \code{kaz_admbnda_adm0_2019.shx}, \code{kaz_admbnda_adm0_2019.dbf},
-\code{kaz_admbnda_adm0_2019.prj} & \code{kaz_admbnda_adm0_2019.cpg}.
+\url{https://data.humdata.org/dataset/cod-ab-kaz}, files
+\code{kaz_admbnda_adm0_2018.shp}, \code{kaz_admbnda_adm0_2018.shx}, \code{kaz_admbnda_adm0_2018.dbf},
+\code{kaz_admbnda_adm0_2018.prj} & \code{kaz_admbnda_adm0_2018.cpg}.
 }
 \usage{
 data(kaz_adm0_sf)
@@ -57,7 +58,7 @@ if (requireNamespace("tmap", quietly = TRUE)) {
 library(tmap)
 
 tmap::qtm(shp = kaz_adm0_sf, fill  = 'coral',
-          text = "ADM0_KK", text.col = "gray10", shadow = TRUE,
+          text = "ADM0_EN", text.col = "gray10", shadow = TRUE,
           border = 'red', frame = TRUE,
           title = "Kazakhstan: Administrative units level 0 (country)"
 
@@ -73,17 +74,9 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 
 library(ggplot2)
 
-ggplot2::qplot(
-  data = kaz_adm0_sf["ADM0_EN"],
-  geom  = "sf",
-  main = 'Kazakhstan: Administrative units level 0 (country)'
-)
-
-# ggplot2::ggplot(kaz_adm0_sf) +
-#   ggplot2::geom_sf(
-#     mapping = ggplot2::aes(fill = "ADM0_EN"),
-#     show.legend = FALSE
-#   )
+ggplot2::ggplot(kaz_adm0_sf) +
+  ggplot2::geom_sf(mapping = ggplot2::aes(fill="ADM0_EN"), show.legend=FALSE) +
+  ggplot2::ggtitle('Kazakhstan: Administrative units level 0 (country)')
 
 }  # The end for {ggplot2} package
 
@@ -134,7 +127,9 @@ leaflet::leaflet(data = .) \%>\%                           # Create leaflet obje
 \href{../doc/making_maps.html#spatial_data}{package vignette} or \code{vignette("making_maps", package = "geokz")}
 
 Other datasets with geographic features: 
+\code{\link{kaz_adm1_2018_sf}},
 \code{\link{kaz_adm1_sf}},
+\code{\link{kaz_adm2_2018_sf}},
 \code{\link{kaz_adm2_sf}},
 \code{\link{kaz_cnt1_sf}}
 }

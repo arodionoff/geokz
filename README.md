@@ -2,7 +2,7 @@
 
 This project downloads a set of shapefiles relevant to the Republic of Kazakhstan. 
 
-![](man/figures/Kazakhstan.png)
+![](man/figures/Kazakhstan2024.png)
 
 `geokz`-package provides access to multiple dataset of different types and for different use. 
 
@@ -10,28 +10,38 @@ This project downloads a set of shapefiles relevant to the Republic of Kazakhsta
 
 `geokz` can be installed from Github using:
 
-`library("devtools")`
+```
+library("devtools")
 
-`devtools::install_github("arodionoff/geokz")`
+devtools::install_github("arodionoff/geokz")
+```
 
 Vignette [*Making maps using {geokz}-package*](https://rpubs.com/A_Rodionoff/geokz) provides multiple real-world examples of their usage.
 
-To use vignettes, you should use the installation with vignettes compilation: `devtools::install_github("arodionoff/geokz", build_vignettes = TRUE)`.
+To use vignettes, you should use the installation with vignettes compilation:
+
+```
+devtools::install_github("arodionoff/geokz", build_vignettes = TRUE)
+```
 
 In these vignettes we introduce the different datasets and explain their use cases. 
 
-## The following spatial objects are included:  
+## The following spatial objectsare included:  
 
-**administrative:**
+**administrative division as of January 2024 and June 2018:**
 
-* **kaz_adm0_sf**: Administrative units level 0 - the [boundary of Kazakhstan](inst/shape/kaz_admbnda_adm0_2018.shp).
-* **kaz_adm1_sf**: Administrative units level 1 - the [boundaries of Regions](inst/shape/kaz_admbnda_adm1_2018.shp) (the Capital, Oblasts and Cities of Republican Significance).
-* **kaz_adm2_sf**: Administrative units level 2 - the [boundaries of Districts](inst/shape/kaz_admbnda_adm2_2018.shp) (Oblast Rayons, City of Oblast Significance and Rayons of Cities of Republican Significance)
-* **kaz_cnt1_sf**: All Administrative [Centers](inst/shape/kaz_admbnda_cnt1_2019.shp) level 1 of Kazakhstan including the Capital, Cities of Republican Significance and all center of Oblasts.
+* **kaz_adm0_sf**: Administrative units level 0 - the [boundary of Kazakhstan](inst/shape/kaz_admbnda_adm0_2024.shp).
+* **kaz_adm1_sf**: Administrative units level 1 - the [boundaries of Regions](inst/shape/kaz_admbnda_adm1_2024.shp) (the Capital, Oblasts and Cities of Republican Significance).
+* **kaz_adm1_2018_sf**: Administrative units level 1 in 2018-2022 years ("Old" Kazakhstan) - the [boundaries of Regions](inst/shape/kaz_admbnda_adm1_2018.shp) (the Capital, Oblasts and Cities of Republican Significance).
+* **kaz_adm2_sf**: Administrative units level 2 - the [boundaries of Districts](inst/shape/kaz_admbnda_adm2_2024.shp) 
+* **kaz_adm2_2018_sf**: Administrative units level 2 in 2018-2022 years ("Old" Kazakhstan) - the [boundaries of Districts](inst/shape/kaz_admbnda_adm2_2018.shp) 
 
-**natural:**
+(Oblast Rayons, City of Oblast Significance and Rayons of Cities of Republican Significance)
+* **kaz_cnt1_sf**: All Administrative [Centers](inst/shape/kaz_admbnda_cnt1_2024.shp) level 1 of Kazakhstan including the Capital, Cities of Republican Significance and all center of Oblasts.
 
-* **natural_zones**: the list of Administrative units level 2 of Kazakhstan by Zones according to the natural conditions.
+**natural in 2020:**
+
+* **natural_zones**: the list of Administrative units level 2 of Kazakhstan by Zones according to the natural conditions in 2020 year.
 
 You can use ESRI ArcGIS shapefiles (\*.cpg, \*.dbf, \*.prj, \*.shp, \*.shx) load as [`shape`](inst/shape) subdirectory.
 
@@ -60,7 +70,7 @@ import geopandas as gpd
 
 gpd.show_versions()
 
-kaz_ADM1_gdf = gpd.read_file('C:/R/R-4.1/library/geokz/shape/kaz_admbnda_adm1_2018.shp',
+kaz_ADM1_gdf = gpd.read_file('C:/R/R-4.4/library/geokz/shape/kaz_admbnda_adm1_2024.shp',
                              driver = 'ESRI Shapefile', encoding = 'utf-8')
 
 kaz_ADM1_gdf.crs
@@ -69,24 +79,30 @@ print(kaz_ADM1_gdf)
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
+# Categories in legends produced by geopandas are sorted and this is hardcoded
+# https://stackoverflow.com/questions/54370302/changing-the-order-of-entries-for-a-geopandas-choropleth-map-legend
+
 # Set Number Code for Regions and Customer Legend
 kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ11') | 
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ39') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ55') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ59') |
-                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ71'), 'Regions'] = 0  # 'North'
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ71'), 'Regions'] = 0    # 'North'
 kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ15') | 
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ23') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ27') |
-                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ47'), 'Regions'] = 1  # 'West'
-kaz_ADM1_gdf.loc[kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ35', 'Regions']   = 2  # 'Center'
-kaz_ADM1_gdf.loc[kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ63', 'Regions']   = 3  # 'East'
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ47'), 'Regions'] = 1    # 'West'
+kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ35') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ62'), 'Regions']   = 2  # 'Center'
+kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ10') | 
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ63'), 'Regions']   = 3  # 'East'
 kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ19') | 
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ31') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ33') | 
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ43') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ61') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ75') |
-                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ79'), 'Regions'] = 4  # 'South'
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ79'), 'Regions'] = 4    # 'South'
 
 #Re-Projection
 kaz_ADM1_gdf = kaz_ADM1_gdf.to_crs(epsg = 2502)  # Pulkovo 1942 / Gauss-Kruger CM 69E. See <https://epsg.io/2502>
@@ -100,6 +116,8 @@ regions_symb={0: 'North', 1: 'West', 2: 'Center', 3: 'East', 4: 'South'}
 fig, ax = plt.subplots(figsize=(7, 4))
 
 kaz_ADM1_gdf.plot(
+  # column = 'Regions',
+  # cmap = 'Set3',
   color = kaz_ADM1_gdf['Regions'].map(palette_symb),
   edgecolor = 'black',
   linewidth = 0.15,
@@ -111,6 +129,7 @@ kaz_ADM1_gdf.plot(
 kaz_ADM1_gdf.apply(lambda x: ax.annotate(text=x.ADM1_EN, xy=x.geometry.centroid.coords[0], ha='center', size=9), axis=1)
 
 # Create Customer Legend for Category Legend
+# see https://matplotlib.org/stable/gallery/text_labels_and_annotations/custom_legends.html
 legend_elements = []
 for x in range(len(regions_symb)):
     legend_elements.append(patches.Patch(facecolor=palette_symb[x],

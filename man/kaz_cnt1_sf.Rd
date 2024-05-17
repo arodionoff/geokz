@@ -6,7 +6,7 @@
 \title{Map of All Administrative centers level 1 of Kazakhstan}
 \format{
 A \code{POINT} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
-18 rows and fields:
+21 rows and fields:
 \itemize{
 \item KATO: Classifier of Administrative Territorial Objects (rus.
 \href{https://data.egov.kz/datasets/view?index=kato}{KATO})
@@ -37,7 +37,7 @@ data(kaz_cnt1_sf)
 A \strong{POINT} \code{sf} object including the Capital Nur-Sultan (formerly Astana), 3 Cities of
 Republican Significance (Almaty, Shymkent and also Baikonur or Baykonyr, near is
 the World's First Spaceport) and all center of Oblasts (the principal units
-of a country) of Kazakhstan (2019 version).  The cities mapped by Alexander Rodionov in
+of a country) of Kazakhstan (2022 version).  The cities mapped by Alexander Rodionov in
 \href{https://qgis.org/}{QGIS}.
 }
 \examples{
@@ -70,7 +70,6 @@ kaz_cnt1_sf$punch <- (5 - kaz_cnt1_sf$TYPE_CNT1)
 plot(x = kaz_adm1_sf["ADM1_EN"], reset = FALSE, cex.main = 1.0,
      main = "Kazakhstan: The Capital, Cities of Republican Significance & Oblast Centers (ADM1)")
 plot(kaz_cnt1_sf["KATO"], col = "red", pch = "o", add = TRUE)
-
 
 # Use {tmap} package for draw of Thematic Maps
 
@@ -122,11 +121,12 @@ if (requireNamespace("tmap", quietly = TRUE)) {
   # plot map
   print(kaz_tm)
 
-  # {tmap} package uses {leaflet} package for draw of Interactive Maps as `sf` objects
-  # switch to Interactiv mode: "view"
+  # {tmap} package uses {leaflet} package for draw of Interactive Maps as
+  # `sf` objects switch to Interactiv mode: "view"
   tmap::ttm()  # or tmap::tmap_mode(mode = "view")
 
   # view map with {leaflet} package
+  tmap::tmap_options(check.and.fix = TRUE)
   print(kaz_tm)
 
   # restore current mode ("plot")
@@ -149,7 +149,8 @@ sf::st_crs(x = kaz_adm2_sf) <- 4326L
 
 ko_bb <-
   dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') \%>\%
-  sf::st_transform(crs = 2501) \%>\% # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
+  # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
+  sf::st_transform(crs = 2501) \%>\%
   sf::st_bbox() \%>\%
   sf::st_as_sfc() \%>\%
   sf::st_buffer(dist = 30000)
@@ -158,46 +159,49 @@ kaz_adm2_sf \%>\%
   dplyr::filter(ADM1_EN =="Kyzylorda") \%>\%
   dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) \%>\%
   ggplot2::ggplot(data = .) +
-  ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
+  ggplot2::geom_sf(                       # Boundaries of Kazakhstani Oblasts
     data  = sf::st_geometry(kaz_adm1_sf),
     color = "red",
     size  = 1
   ) +
-  ggplot2::geom_sf(                                           # Rayons of Kyzylorda Oblasts
+  ggplot2::geom_sf(                       # Rayons of Kyzylorda Oblasts
     mapping = ggplot2::aes(fill = ADM2_EN)
   ) +  # forcats::fct_inorder(ADM2_EN)
-  ggplot2::geom_sf_text(                                      # Labels of Rayons
+  ggplot2::geom_sf_text(                  # Labels of Rayons
     data = dplyr::filter(kaz_adm2_sf, (ADM1_EN == 'Kyzylorda' &
-                                    magrittr::and(ADM2_EN != "Kyzylorda", ADM2_EN != "Baykonyr"))),
+                            magrittr::and(ADM2_EN != "Kyzylorda",
+                                          ADM2_EN != "Baykonyr"))),
     mapping = ggplot2::aes(label = ADM2_EN),
     size = 2.5
   ) +
   ggplot2::scale_fill_brewer(palette = "Pastel1") +
-  ggplot2::geom_sf(                     # Administrative Center & City of Republican Significance
+  ggplot2::geom_sf( # Administrative Center & City of Republican Significance
     data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
     size = 3,
     col = "red",
     shape = 19
   ) +
-  ggplot2::geom_sf_text(                                      # Labels of Cities
+  ggplot2::geom_sf_text(                # Labels of Cities
     data  = dplyr::filter(kaz_cnt1_sf, ADM1_EN == 'Kyzylorda'),
     mapping = ggplot2::aes(label = NAME_EN),
     nudge_x = 65000,
     nudge_y = -9000,
     size = 4
   ) +
-  ggplot2::geom_sf(                                           # Boundaries of Kazakhstan
+  ggplot2::geom_sf(                     # Boundaries of Kazakhstan
     data  = sf::st_geometry(kaz_adm0_sf),
     alpha  = 0,
     color = "brown",
     size  = 2
   ) +
-  # Set new Coordinate System: Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
+  # Set new Coordinate System: Pulkovo 1942 /
+  #  Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
   ggplot2::coord_sf(xlim = c(sf::st_bbox(ko_bb)$xmin, sf::st_bbox(ko_bb)$xmax),
                     ylim = c(sf::st_bbox(ko_bb)$ymin, sf::st_bbox(ko_bb)$ymax),
                     crs = 2501, expand = FALSE) +
   ggplot2::theme_linedraw() +
-  ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 2")) +
+  ggplot2::guides(fill = ggplot2::guide_legend(
+                     title = "Administrative \nunits level 2")) +
   ggplot2::labs(title = "Kazakhstan: Kyzylorda Oblast
 (Administrative Center, Rayons & City of Republican Significance)",
 x = NULL,
@@ -217,10 +221,12 @@ library(leaflet)
 library(magrittr)
 
 urls <-
-  c("Akmola_Region", "Aktobe_Region", "Almaty_Region", "Atyrau_Region", "West_Kazakhstan_Region",
-    "Jambyl_Region" , "Karaganda_Region", "Kostanay_Region", "Kyzylorda_Region",
-    "Mangystau_Region", "Pavlodar_Region", "North_Kazakhstan_Region", "Turkistan_Region",
-    "East_Kazakhstan_Region", "Nur-Sultan", "Almaty", "Shymkent")
+  c("Abay_Region", "Akmola_Region", "Aktobe_Region", "Almaty_Region",
+    "Atyrau_Region", "West_Kazakhstan_Region", "Jambyl_Region",
+    "Jetisu_Region", "Karaganda_Region", "Kostanay_Region",
+    "Kyzylorda_Region", "Mangystau_Region", "Pavlodar_Region",
+    "North_Kazakhstan_Region", "Turkistan_Region", "Ulytau_Region",
+    "East_Kazakhstan_Region", "Astana", "Almaty", "Shymkent")
 
 # Basemap can be varied from a list of {leaflet} providers
 # <https://leaflet-extras.github.io/leaflet-providers/preview>.
@@ -234,8 +240,10 @@ leaflet::leaflet() \%>\%
     fillColor = "coral",
     fillOpacity = 0.3,
     smoothFactor = 0.5,
-    popup = ~paste0("Region: ", '<a href = "https://en.wikipedia.org/wiki/', urls, '"> ',
-                    ADM1_EN, "</a><br>", "KATO: ", KATO, "<br>", "ISO 3166-2: ", ISO_3166_2),
+    popup = ~paste0("Region: ",
+                    '<a href = "https://en.wikipedia.org/wiki/', urls, '"> ',
+                    ADM1_EN, "</a><br>", "KATO: ", KATO, "<br>",
+                    "ISO 3166-2: ", ISO_3166_2),
     label = ~paste(ADM1_EN, ":", ADM1_PCODE),
     labelOptions = labelOptions(direction = "auto")
   ) \%>\%
@@ -255,7 +263,9 @@ leaflet::leaflet() \%>\%
 
 Other datasets with geographic features: 
 \code{\link{kaz_adm0_sf}},
+\code{\link{kaz_adm1_2018_sf}},
 \code{\link{kaz_adm1_sf}},
+\code{\link{kaz_adm2_2018_sf}},
 \code{\link{kaz_adm2_sf}}
 }
 \concept{datasets with geographic features}

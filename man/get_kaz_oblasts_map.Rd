@@ -11,7 +11,8 @@ get_kaz_oblasts_map(
                     ADM1_RU = NULL,    # Character
                     ADM1_PCODE = NULL, # Character
                     ISO_3166_2 = NULL, # Character
-                    crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass"
+                    crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass",
+                    Year = 2024L       # Integer
                     )
 }
 \arguments{
@@ -43,6 +44,8 @@ number (for example, 2502) or \code{proj4string} from the \href{https://proj.org
 (for example, "+proj=longlat +datum=WGS84" as a projection specifier or
 "+init=epsg:4326" as EPSG number) or \code{NULL} to get projection for A
 \strong{Lambert Conformal Conic (LCC)} with \href{https://en.wikipedia.org/wiki/SK-42_reference_system}{Krasovsky 1940 ellipsoid}.  See \strong{Details}.}
+
+\item{Year}{\strong{An integer} of Year for Administrative-Territorial divisions of the Country: 2018 or 2024 (default).}
 }
 \value{
 A \code{sf} object with the requested geographic geometries.
@@ -51,7 +54,7 @@ A \code{sf} object with the requested geographic geometries.
 Returns Geographical features of
 \href{https://en.wikipedia.org/wiki/Regions_of_Kazakhstan}{Oblasts & Cities of Republican Significance of Kazakhstan} -
 Map of All Administrative units level 1 (the principal units of a country)
-as polygons by specified codes or names or all of them.
+as polygons by specified codes or names or all of them in 2022 (default) or 2018 year.
 }
 \details{
 When filter Geographical features you can use some names of Oblasts &
@@ -60,7 +63,7 @@ Cities of Republican Significance in English, Kazakh or Russian or National code
 ISO International codes (\href{https://en.wikipedia.org/wiki/ISO_3166-2:KZ}{ISO 3166-2} corresponding to level 1)
 (see \link{kaz_adm1_sf}).
 
-Nur-Sultan, Almaty and Shymkent are considered as region on this dataset.
+Astana, Almaty and Shymkent are considered as region on this dataset.
 
 Baykonyr (a city near the World's First Spaceport) are not considered on this dataset.
 
@@ -137,8 +140,11 @@ You can upload dataset \link{kaz_adm1_sf} for Oblasts & Cities of Republican Sig
 of Kazakhstan directly, but you must manually filter the Geographic Features
 you require and set the suitable \href{https://en.wikipedia.org/wiki/List_of_map_projections}{Cartographic Projection}.
 
-For maps of Rayons of Oblast & City of Oblast Significance please use function
-\link{get_kaz_rayons_map}\verb{()} or dataset \link{kaz_adm2_sf}.
+For maps of Oblast & City of Republican Significance in 2022 Version  please use function
+\link{get_kaz_oblasts_map} () or dataset \link{kaz_adm1_sf}.
+
+For maps of Oblast & City of Republican Significance in 2018 Version  please use function
+\link{get_kaz_oblasts_map}\code{(Year = 2018L)} or dataset \link{kaz_adm1_2018_sf}.
 
 \href{../doc/making_maps.html}{package vignette} or \code{vignette("making_maps", package = "geokz")}
 

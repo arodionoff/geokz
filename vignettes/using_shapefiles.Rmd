@@ -1,5 +1,5 @@
 ---
-title: "Using shape files R & Python"
+title: "Using shape files with R & Python"
 author: "Alexander Rodionov"
 output: rmarkdown::html_vignette
 vignette: >
@@ -41,7 +41,7 @@ devtools::install_github("arodionoff/geokz", build_vignettes = TRUE)
 
 ## Load shape file with Administrative units level 1
 
-Kazakhstan is divided into 14 regions (Kazakh: облыстар/oblystar; singular: облыс/oblys; Russian: области/oblasti; singular: область/oblast' ).
+Kazakhstan is divided into 20 regions (Kazakh: облыстар/oblystar; singular: облыс/oblys; Russian: области/oblasti; singular: область/oblast' ).
 
 ```{r kaz_adm1_sf}
 library(geokz)
@@ -56,7 +56,7 @@ dplyr::as_tibble(IQR$results) %>%
                        Item, Title)
 
 shpfile <- 
-  system.file("shape", "kaz_admbnda_adm1_2018.shp", package = "geokz")
+  system.file("shape", "kaz_admbnda_adm1_2024.shp", package = "geokz")
 
 # agr - attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry
 agr = c(KATO = "identity", ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant",
@@ -69,6 +69,7 @@ kaz_ADM1_sf <-
 print(sf::st_crs(kaz_ADM1_sf))
 
 glimpse(kaz_ADM1_sf)
+
 ```
 
 Load geographic coverage by Oblasts of the country from shapefiles in subdirectory `shape`.
@@ -88,8 +89,8 @@ kaz_ADM1_sf <-
     dplyr::mutate(Regions = dplyr::case_when(
       ADM1_PCODE %in% c("KZ11", "KZ39", "KZ55", "KZ59", "KZ71") ~ "North",
       ADM1_PCODE %in% c("KZ15", "KZ23", "KZ27", "KZ47")         ~ "West",
-      ADM1_PCODE == "KZ35"                                      ~ "Center",
-      ADM1_PCODE == "KZ63"                                      ~ "East",
+      ADM1_PCODE %in% c("KZ35", "KZ62")                         ~ "Center",
+      ADM1_PCODE %in% c("KZ10", "KZ63")                         ~ "East",
       TRUE                                                      ~ "South"      
     ) %>% 
       factor(., levels = c("North", "West", "Center", "East", "South")))
@@ -113,14 +114,13 @@ If necessary, a similar operation can be performed in **Python**.
 
 library('reticulate')       # Interface to 'Python'
 
-# options(rstudio.python.installationPath = "D:/Python/Anaconda3")
+# options(rstudio.python.installationPath = "D:/Python/Miniconda3")
 # Sys.setenv(RETICULATE_MINICONDA_PATH = "D:/Python/Miniconda3")
-# Sys.setenv(RETICULATE_MINICONDA_PATH = "D:/Python/Anaconda3")
 # reticulate::install_miniconda(path = miniconda_path(), update = TRUE, force = FALSE)
-# reticulate::conda_install(envname  = 'r-reticulate', packages = c('pandas', 'geopandas'))
+# reticulate::conda_install(envname  = 'r-reticulate', packages = c('matplotlib', 'geopandas'))
 reticulate::miniconda_path()
 # reticulate::use_miniconda()
-# reticulate::use_condaenv('D:\\Python\\Anaconda3\\envs\\r-reticulate', required = TRUE)
+# reticulate::use_condaenv('D:\\Python\\Miniconda3\\envs\\r-reticulate', required = TRUE)
 reticulate::py_discover_config()
 
 # reticulate::conda_list()  # if conda is not exist Error
@@ -141,10 +141,11 @@ If the required packages are not available, then they should be installed in the
 D:
 cd D:/Python/Miniconda3/envs/r-reticulate
 activate r-reticulate
-pip install pandas
+pip install matplotlib
 pip install geopandas
 
 pip show GDAL fiona attrs pyproj shapely geopandas matplotlib
+# pip install --trusted-host pypi.python.org --trusted-host pypi.org --trusted-host files.pythonhosted.org GDAL fiona attrs pyproj shapely geopandas matplotlib
 
 ```
 
@@ -217,15 +218,18 @@ kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ11') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ39') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ55') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ59') |
-                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ71'), 'Regions'] = 0  # 'North'
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ71'), 'Regions'] = 0    # 'North'
 kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ15') | 
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ23') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ27') |
-                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ47'), 'Regions'] = 1  # 'West'
-kaz_ADM1_gdf.loc[kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ35', 'Regions']   = 2  # 'Center'
-kaz_ADM1_gdf.loc[kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ63', 'Regions']   = 3  # 'East'
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ47'), 'Regions'] = 1    # 'West'
+kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ35') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ62'), 'Regions']   = 2  # 'Center'
+kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ10') | 
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ63'), 'Regions']   = 3  # 'East'
 kaz_ADM1_gdf.loc[(kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ19') | 
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ31') |
+                 (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ33') | 
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ43') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ61') |
                  (kaz_ADM1_gdf['ADM1_PCODE'] == 'KZ75') |

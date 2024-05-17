@@ -6,7 +6,7 @@
 #' Returns Geographical features of
 #' [Oblasts & Cities of Republican Significance of Kazakhstan](https://en.wikipedia.org/wiki/Regions_of_Kazakhstan) -
 #' Map of All Administrative units level 1 (the principal units of a country)
-#' as polygons by specified codes or names or all of them.
+#' as polygons by specified codes or names or all of them in 2022 (default) or 2018 year.
 #'
 #' @name get_kaz_oblasts_map
 #'
@@ -17,7 +17,8 @@
 #'                     ADM1_RU = NULL,    # Character
 #'                     ADM1_PCODE = NULL, # Character
 #'                     ISO_3166_2 = NULL, # Character
-#'                     crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass"
+#'                     crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass",
+#'                     Year = 2024L       # Integer
 #'                     )
 #'
 #' @param KATO **A vector** of Codes of **Classifier of Administrative Territorial Objects** (rus.
@@ -49,6 +50,8 @@
 #' "+init=epsg:4326" as EPSG number) or `NULL` to get projection for A
 #' **Lambert Conformal Conic (LCC)** with [Krasovsky 1940 ellipsoid](https://en.wikipedia.org/wiki/SK-42_reference_system).  See **Details**.
 #'
+#' @param Year **An integer** of Year for Administrative-Territorial divisions of the Country: 2018 or 2024 (default).
+#'
 #' @importFrom sf st_crs st_transform
 #'
 #' @return A `sf` object with the requested geographic geometries.
@@ -63,7 +66,7 @@
 #' ISO International codes ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ) corresponding to level 1)
 #' (see [kaz_adm1_sf]).
 #'
-#' Nur-Sultan, Almaty and Shymkent are considered as region on this dataset.
+#' Astana, Almaty and Shymkent are considered as region on this dataset.
 #'
 #' Baykonyr (a city near the World's First Spaceport) are not considered on this dataset.
 #'
@@ -90,8 +93,11 @@
 #' of Kazakhstan directly, but you must manually filter the Geographic Features
 #' you require and set the suitable [Cartographic Projection](https://en.wikipedia.org/wiki/List_of_map_projections).
 #'
-#' For maps of Rayons of Oblast & City of Oblast Significance please use function
-#' [get_kaz_rayons_map]`()` or dataset [geokz::kaz_adm2_sf].
+#' For maps of Oblast & City of Republican Significance in 2022 Version  please use function
+#' [get_kaz_oblasts_map] () or dataset [geokz::kaz_adm1_sf].
+#'
+#' For maps of Oblast & City of Republican Significance in 2018 Version  please use function
+#' [get_kaz_oblasts_map]`(Year = 2018L)` or dataset [geokz::kaz_adm1_2018_sf].
 #'
 #' [package vignette](../doc/making_maps.html) or `vignette("making_maps", package = "geokz")`
 #'
@@ -99,39 +105,44 @@
 #'
 get_kaz_oblasts_map <- function(KATO=NULL, ADM1_EN=NULL, ADM1_KK=NULL, ADM1_RU=NULL,
                                 ADM1_PCODE=NULL, ISO_3166_2=NULL,
-                                crs="+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass") {
+                                crs="+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass",
+                                Year=2024L) {
+
+  df_sf <-
+    if ( is.na(Year) | is.null(Year) | Year >= 2022 ) geokz::kaz_adm1_sf else geokz::kaz_adm1_2018_sf
 
   if (is.null(KATO) & is.null(ADM1_EN) & is.null(ADM1_KK) & is.null(ADM1_RU) &
       is.null(ADM1_PCODE) & is.null(ISO_3166_2)) {
-    df_sf <- geokz::kaz_adm1_sf
+    df_sf <- df_sf
   } else {
-      if ( !is.null(KATO) ) {
-        KATO_ <- KATO
-        df_sf <- base::subset(geokz::kaz_adm1_sf, KATO %in% KATO_)
+    if ( !is.null(KATO) ) {
+      KATO_ <- KATO
+      df_sf <- base::subset(df_sf, KATO %in% KATO_)
+    } else {
+      if ( !is.null(ADM1_EN) ) {
+        ADM1_EN_ <- ADM1_EN
+        df_sf <- base::subset(df_sf, ADM1_EN %in% ADM1_EN_)
       } else {
-        if ( !is.null(ADM1_EN) ) {
-          ADM1_EN_ <- ADM1_EN
-          df_sf <- base::subset(geokz::kaz_adm1_sf, ADM1_EN %in% ADM1_EN_)
+        if ( !is.null(ADM1_KK) ) {
+          ADM1_KK_ <- ADM1_KK
+          df_sf <- base::subset(df_sf, ADM1_KK %in% ADM1_KK_)
         } else {
-          if ( !is.null(ADM1_KK) ) {
-            ADM1_KK_ <- ADM1_KK
-            df_sf <- base::subset(geokz::kaz_adm1_sf, ADM1_KK %in% ADM1_KK_)
+          if ( !is.null(ADM1_RU) ) {
+            ADM1_RU_ <- ADM1_RU
+            df_sf <- base::subset(df_sf, ADM1_RU %in% ADM1_RU_)
           } else {
-            if ( !is.null(ADM1_RU) ) {
-              ADM1_RU_ <- ADM1_RU
-              df_sf <- base::subset(geokz::kaz_adm1_sf, ADM1_RU %in% ADM1_RU_)
+            if ( !is.null(ADM1_PCODE) ) {
+              ADM1_PCODE_ <- ADM1_PCODE
+              df_sf <- base::subset(df_sf, ADM1_PCODE %in% ADM1_PCODE_)
             } else {
-              if ( !is.null(ADM1_PCODE) ) {
-                ADM1_PCODE_ <- ADM1_PCODE
-                df_sf <- base::subset(geokz::kaz_adm1_sf, ADM1_PCODE %in% ADM1_PCODE_)
-              } else {
-                  ISO_3166_2_ <- ISO_3166_2
-                  df_sf <- base::subset(geokz::kaz_adm1_sf, ISO_3166_2 %in% ISO_3166_2_)
-                }  }   }   }     }      }
+              ISO_3166_2_ <- ISO_3166_2
+              df_sf <- base::subset(df_sf, ISO_3166_2 %in% ISO_3166_2_)
+            }  }   }   }     }      }
+
 # If you save an sf-dataframe with a newer version of GDAL, and then try st_transform on a system with an older version
 # of GDAL, the projection info cannot be read properly. The solution is to re-set the projection:
 # EPSG:4326 or WGS84 - World Geodetic System 1984 - see https://github.com/r-spatial/sf/issues/1419
-sf::st_crs(x = df_sf) <- 4326L
+  sf::st_crs(x = df_sf) <- 4326L
 
 # A Lambert Conformal Conic projection (LCC) with Krasovsky 1940 ellipsoid
 # <https://proj.org/operations/projections/lcc.html>
@@ -160,7 +171,7 @@ sf::st_crs(x = df_sf) <- 4326L
 #' @description
 #' Returns Geographical features of [Rayons of Oblasts & Cities of Oblast Significance of Kazakhstan](https://en.wikipedia.org/wiki/Regions_of_Kazakhstan) -
 #' Map of All Administrative units level 2 (the district units of principal units)
-#' as polygons by specified codes or names or all of them.
+#' as polygons by specified codes or names or all of them in 2024 (default) or 2018 year.
 #'
 #' @name get_kaz_rayons_map
 #'
@@ -175,7 +186,8 @@ sf::st_crs(x = df_sf) <- 4326L
 #'                    ADM2_RU = NULL,     # Character
 #'                    ADM2_PCODE = NULL,  # Character
 #'                    ISO_3166_2 = NULL,  # Character
-#'                    crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass"
+#'                    crs = "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass",
+#'                    Year = 2024L        # Integer
 #'                    )
 #'
 #' @param KATO **A vector** of Codes of **Classifier of Administrative Territorial Objects** (rus.
@@ -223,6 +235,8 @@ sf::st_crs(x = df_sf) <- 4326L
 #' "+init=epsg:4326" as EPSG number) or `NULL` to get projection for A
 #' **Lambert Conformal Conic (LCC)** with [Krasovsky 1940 ellipsoid](https://en.wikipedia.org/wiki/SK-42_reference_system).  See **Details**.
 #'
+#' @param Year **An integer** of Year for Administrative-Territorial divisions of the Country: 2018 or 2024 (default).
+#'
 #' @importFrom sf st_crs st_transform
 #'
 #' @return A `sf` object with the requested geographic geometries.
@@ -265,8 +279,11 @@ sf::st_crs(x = df_sf) <- 4326L
 #' of Kazakhstan directly, but you must manually filter the Geographic Features
 #' you require and set the suitable [Cartographic Projection](https://en.wikipedia.org/wiki/List_of_map_projections).
 #'
-#' For maps of Oblast & City of Republican Significance please use function
-#' [get_kaz_oblasts_map] () or dataset [geokz::kaz_adm1_sf].
+#' For maps of Rayons of Oblast & City of Oblast Significance in 2024 Version please use function
+#' [get_kaz_rayons_map]`()` or dataset [geokz::kaz_adm2_sf].
+#'
+#' For maps of Rayons of Oblast & City of Oblast Significance in 2018 Version please use function
+#' [get_kaz_rayons_map]`(Year = 2018L)` or dataset [geokz::kaz_adm2_2018_sf].
 #'
 #' [package vignette](../doc/making_maps.html) or `vignette("making_maps", package = "geokz")`
 #'
@@ -275,52 +292,56 @@ sf::st_crs(x = df_sf) <- 4326L
 get_kaz_rayons_map <- function(KATO=NULL, ADM1_EN=NULL, ADM1_KK=NULL, ADM1_RU=NULL,
                                ADM1_PCODE=NULL, ADM2_EN=NULL, ADM2_KK=NULL, ADM2_RU=NULL,
                                ADM2_PCODE=NULL, ISO_3166_2=NULL,
-                               crs="+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass") {
+                               crs="+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass",
+                               Year=2024L) {
+
+  df_sf <-
+    if ( is.na(Year) | is.null(Year) | Year >= 2024 ) geokz::kaz_adm2_sf else geokz::kaz_adm2_2018_sf
 
   if (is.null(KATO) & is.null(ADM1_EN) & is.null(ADM1_KK) & is.null(ADM1_RU) &
       is.null(ADM1_PCODE) & is.null(ADM2_EN) & is.null(ADM2_KK) & is.null(ADM2_RU) &
       is.null(ADM2_PCODE) & is.null(ISO_3166_2)) {
-    df_sf <- geokz::kaz_adm2_sf
+    df_sf <- df_sf
   } else {
     if ( !is.null(KATO) ) {
       KATO_ <- KATO
-      df_sf <- base::subset(geokz::kaz_adm2_sf, KATO %in% KATO_)
+      df_sf <- base::subset(df_sf, KATO %in% KATO_)
     } else {
       if ( !is.null(ADM1_EN) ) {
         ADM1_EN_ <- ADM1_EN
-        df_sf <- base::subset(geokz::kaz_adm2_sf, ADM1_EN %in% ADM1_EN_)
+        df_sf <- base::subset(df_sf, ADM1_EN %in% ADM1_EN_)
       } else {
         if ( !is.null(ADM1_KK) ) {
           ADM1_KK_ <- ADM1_KK
-          df_sf <- base::subset(geokz::kaz_adm2_sf, ADM1_KK %in% ADM1_KK_)
+          df_sf <- base::subset(df_sf, ADM1_KK %in% ADM1_KK_)
         } else {
           if ( !is.null(ADM1_RU) ) {
             ADM1_RU_ <- ADM1_RU
-            df_sf <- base::subset(geokz::kaz_adm2_sf, ADM1_RU %in% ADM1_RU_)
+            df_sf <- base::subset(df_sf, ADM1_RU %in% ADM1_RU_)
           } else {
             if ( !is.null(ADM1_PCODE) ) {
               ADM1_PCODE_ <- ADM1_PCODE
-              df_sf <- base::subset(geokz::kaz_adm2_sf, ADM1_PCODE %in% ADM1_PCODE_)
+              df_sf <- base::subset(df_sf, ADM1_PCODE %in% ADM1_PCODE_)
             } else {
               if ( !is.null(ADM2_EN) ) {
                 ADM2_EN_ <- ADM2_EN
-                df_sf <- base::subset(geokz::kaz_adm2_sf, ADM2_EN %in% ADM2_EN_)
+                df_sf <- base::subset(df_sf, ADM2_EN %in% ADM2_EN_)
               } else {
                 if ( !is.null(ADM2_KK) ) {
                   ADM2_KK_ <- ADM2_KK
-                  df_sf <- base::subset(geokz::kaz_adm2_sf, ADM2_KK %in% ADM2_KK_)
+                  df_sf <- base::subset(df_sf, ADM2_KK %in% ADM2_KK_)
                 } else {
                   if ( !is.null(ADM2_RU) ) {
                     ADM2_RU_ <- ADM2_RU
-                    df_sf <- base::subset(geokz::kaz_adm2_sf, ADM2_RU %in% ADM2_RU_)
+                    df_sf <- base::subset(df_sf, ADM2_RU %in% ADM2_RU_)
                   } else {
                     if ( !is.null(ADM2_PCODE) ) {
                       ADM2_PCODE_ <- ADM2_PCODE
-                      df_sf <- base::subset(geokz::kaz_adm2_sf, ADM2_PCODE %in% ADM2_PCODE_)
+                      df_sf <- base::subset(df_sf, ADM2_PCODE %in% ADM2_PCODE_)
                     } else {
                       ISO_3166_2_ <- ISO_3166_2
-                      df_sf <- base::subset(geokz::kaz_adm2_sf, ISO_3166_2 %in% ISO_3166_2_)
-            }  }   }    }   }  }   }   }     }      }
+                      df_sf <- base::subset(df_sf, ISO_3166_2 %in% ISO_3166_2_)
+                    }  }   }    }   }  }   }   }     }      }
 
   # If you save an sf-dataframe with a newer version of GDAL, and then try st_transform on a system with an older version
   # of GDAL, the projection info cannot be read properly. The solution is to re-set the projection:

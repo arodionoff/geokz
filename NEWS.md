@@ -1,3 +1,23 @@
+# geokz 1.0.0
+
+## Major improvements
+
+This release focuses on four main areas:
+
+1. The creation of three new Kazakhstani Oblasts (Abay Oblast - the administrative center - Semey, Zhetysu Oblast - Taldykorgan, Ulytau Oblast - Zhezkazgan), as well as the transformation of districts in them.
+
+2. Recreation of districts in the Abay Oblast & the East Kazakhstan Oblast and the establishment of new cities of regional significance in the Akmola Oblast - Kosshy and in the Almaty Oblast - Alatau (old name - Zhetigen).
+
+3. Transfer of the administrative center of the Almaty Oblast to the city of Konaiev (old name - Kapshagay), establishment of new urban districts in the capital Astana and the city of Republican Significance - Shymkent.
+
+4. Add Argument of `Year` for some functions for different administrative-territorial divisions of the Country in 2018 and 2024 years.
+
+## Minor improvements
+
+* Clarification of the boundaries of some Rayons of the Oblasts of Kazakhstan.
+
+* Fixed bugs and mistakes in texts.
+
 # geokz 0.0.0.951
 
 ## Minor improvements

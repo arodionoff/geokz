@@ -9,17 +9,17 @@ testthat::test_that("Get Rayons of Oblasts & Cities of Oblast Significance of Ka
   testthat::expect_true(is.data.frame(x))
   testthat::expect_s3_class(x, "sf")
 
-  testthat::expect_equal(nrow(x), 216L)
+  testthat::expect_equal(nrow(x), 226L)
   testthat::expect_equal(sf::st_crs(x)$input, "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass")
   testthat::expect_true(all(sf::st_is_valid(x)))
 
   # structure of datasets...
-  testthat::expect_equal(ncol(x), 15L)
+  testthat::expect_equal(ncol(x), 16L)
   testthat::expect_equal(colnames(x), c("KATO",
                                         "ADM0_EN", "ADM0_KK", "ADM0_RU", "ADM0_PCODE",
                                         "ADM1_EN", "ADM1_KK", "ADM1_RU", "ADM1_PCODE",
                                         "ADM2_EN", "ADM2_KK", "ADM2_RU", "ADM2_PCODE",
-                                        "ISO_3166_2", "geometry"))
+                                        "ISO_3166_2", "Year", "geometry"))
   testthat::expect_type(x$KATO,       "character")
   testthat::expect_type(x$ADM0_EN,    "character")
   testthat::expect_type(x$ADM0_KK,    "character")
@@ -34,6 +34,7 @@ testthat::test_that("Get Rayons of Oblasts & Cities of Oblast Significance of Ka
   testthat::expect_type(x$ADM2_RU,    "character")
   testthat::expect_type(x$ADM2_PCODE, "character")
   testthat::expect_type(x$ISO_3166_2, "character")
+  testthat::expect_type(x$Year,       "integer")
   testthat::expect_s3_class(x$geometry, c("sfc_MULTIPOLYGON", "sfc"))
 
   # projection of dataset with geographic features

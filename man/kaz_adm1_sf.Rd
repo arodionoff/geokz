@@ -3,10 +3,10 @@
 \docType{data}
 \name{kaz_adm1_sf}
 \alias{kaz_adm1_sf}
-\title{Map of All Administrative units level 1 (the principal units of a country) of Kazakhstan}
+\title{Map of All Administrative units level 1 (the principal units of a country) of Kazakhstan in 2024 Year}
 \format{
 A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
-17 rows and fields:
+20 rows and fields:
 \itemize{
 \item KATO: Classifier of Administrative Territorial Objects (rus.
 \href{https://data.egov.kz/datasets/view?index=kato}{KATO})
@@ -18,22 +18,22 @@ A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - W
 \item ADM1_KK: Name of Administrative units level 1 on Kazakh (Cyrillic) characters
 \item ADM1_RU: Name of Administrative units level 1 on Russian (Cyrillic) characters
 \item ADM1_PCODE: Two first characters of code according ISO 3166-2 ("KZ") + \strong{AB} characters of \emph{KATO} (two first characters from \emph{TE})
-\item ISO_3166_2: Codes for the principal subdivisions coded in \href{https://en.wikipedia.org/wiki/ISO_3166-2:KZ}{ISO 3166-2}.
-\item geometry: geometry field (\code{sf} object)
+\item ISO_3166_2: Codes for the principal subdivisions coded in \href{https://en.wikipedia.org/wiki/ISO_3166-2:KZ}{ISO 3166-2}
+\item Year: Version of Administrative-territorial divisions of the country in 2024 year
+\item geometry: geometry field (\code{sf} object).
 }
 }
 \source{
-\url{https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy}, files
-\code{kaz_admbnda_adm1_2019.shp}, \code{kaz_admbnda_adm1_2019.shx}, \code{kaz_admbnda_adm1_2019.dbf},
-\code{kaz_admbnda_adm1_2019.prj} & \code{kaz_admbnda_adm1_2019.cpg}.
+\url{https://data.humdata.org/dataset/cod-ab-kaz}, files of 2024 year
+\code{kaz_admbnda_adm1_2024.shp}, \code{kaz_admbnda_adm1_2024.shx}, \code{kaz_admbnda_adm1_2024.dbf},
+\code{kaz_admbnda_adm1_2024.prj} & \code{kaz_admbnda_adm1_2024.cpg}.
 }
 \usage{
 data(kaz_adm1_sf)
 }
 \description{
 A \code{sf} object including All Administrative units level 1 (the largest subnational units of a country)
-\strong{MULTIPOLYGON} object of Kazakhstan (2018 version after the separation of Shymkent into a City of Republican
-Significance). It contains 14 regions, the Capital - Nur-Sultan (city) and 3 Cities of Republican Significance.
+\strong{MULTIPOLYGON} objects of Kazakhstan in 2024 year. It contains in 5 January 2024 17 regions, the Capital - Nur-Sultan (city) and 3 Cities of Republican Significance.
 }
 \examples{
 data("kaz_adm1_sf")
@@ -69,7 +69,7 @@ tmap::tm_polygons(
   border.col = "black",
   border.alpha = 0.3,
   title = "Administrative \nunits level 1",
-  labels = kaz_adm1_sf$ADM1_KK,
+  labels = kaz_adm1_sf$ADM1_EN,
   palette = c("coral", "orange", "green", "blue")
 ) +
 tmap::tm_text("ADM1_EN", col = "gray10", size = 0.9, shadow = TRUE) +
@@ -96,10 +96,11 @@ library(dplyr)
 kaz_adm1_sf \%>\%
   dplyr::mutate(ADM1_EN = factor(ADM1_EN, levels = ADM1_EN)) \%>\%
   ggplot2::ggplot(data = .) +
-    ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM1_EN)) +  # forcats::fct_inorder(ADM1_EN)
+    ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM1_EN)) +
     ggplot2::geom_sf_text(mapping = ggplot2::aes(label = ADM1_EN)) +
     ggplot2::theme_bw() +
-    ggplot2::guides(fill = ggplot2::guide_legend(title = "Administrative \nunits level 1")) +
+    ggplot2::guides(fill = ggplot2::guide_legend(
+                                    title = "Administrative \nunits level 1")) +
     ggplot2::labs(title = "Kazakhstan: Administrative units level 1
 (Oblasts & Cities of Republican Significance)",
       x = NULL,
@@ -128,7 +129,7 @@ library(magrittr)
 
 points <-
   data.frame(
-    name = c("Nur-Sultan", "Almaty"),
+    name = c("Astana", "Almaty"),
     branch = c("The Capital", "The Biggest City"),
     link = c("https://en.wikipedia.org/wiki/Nur-Sultan",
              "https://en.wikipedia.org/wiki/Almaty"),
@@ -149,7 +150,8 @@ epsg102027 <- leaflet::leafletCRS(
   resolutions = 2^(16:7))
 
 leaflet::leaflet(
-  kaz_adm1_sf \%>\% sf::st_transform(crs = "+proj=longlat +datum=WGS84") \%>\% sf::st_zm(geometry),
+  geokz::kaz_adm1_sf \%>\% sf::st_transform(crs = "+proj=longlat +datum=WGS84") \%>\%
+                            sf::st_zm(geometry),
   options = leafletOptions(crs = epsg102027)
   ) \%>\%
   leaflet::addPolygons(
@@ -178,6 +180,8 @@ leaflet::leaflet(
 
 Other datasets with geographic features: 
 \code{\link{kaz_adm0_sf}},
+\code{\link{kaz_adm1_2018_sf}},
+\code{\link{kaz_adm2_2018_sf}},
 \code{\link{kaz_adm2_sf}},
 \code{\link{kaz_cnt1_sf}}
 }

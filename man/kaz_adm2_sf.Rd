@@ -3,10 +3,10 @@
 \docType{data}
 \name{kaz_adm2_sf}
 \alias{kaz_adm2_sf}
-\title{Map of All Administrative units level 2 (the district units of principal units) of Kazakhstan}
+\title{Map of All Administrative units level 2 (the district units of principal units) of Kazakhstan in 2024 Year}
 \format{
 A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
-216 rows and fields:
+226 rows and fields:
 \itemize{
 \item KATO: Classifier of Administrative Territorial Objects (rus.
 \href{https://data.egov.kz/datasets/view?index=kato}{KATO})
@@ -23,27 +23,28 @@ A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - W
 \item ADM2_RU: Name of Administrative units level 2 on Russian (Cyrillic) characters
 \item ADM2_PCODE: Two first characters of code according ISO 3166-2 ("KZ") + (\strong{AB} characters of \emph{KATO} + \strong{CD} characters of \emph{KATO} + \strong{EF} characters of \emph{KATO}) or six first characters from \emph{TE}
 \item ISO_3166_2: Codes for the principal subdivisions coded in \href{https://en.wikipedia.org/wiki/ISO_3166-2:KZ}{ISO 3166-2}.
-\item geometry: geometry field (\code{sf} object)
+\item Year: Versions of Administrative-territorial divisions of the country in 2024 year
+\item geometry: geometry field (\code{sf} object).
 }
 }
 \source{
-\url{https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy}, files
-\code{kaz_admbnda_adm2_2019.shp}, \code{kaz_admbnda_adm2_2019.shx}, \code{kaz_admbnda_adm2_2019.dbf},
-\code{kaz_admbnda_adm2_2019.prj} & \code{kaz_admbnda_adm2_2019.cpg}.
+\url{https://data.humdata.org/dataset/cod-ab-kaz}, files of 2024 year
+\code{kaz_admbnda_adm2_2024.shp}, \code{kaz_admbnda_adm2_2024.shx}, \code{kaz_admbnda_adm2_2024.dbf},
+\code{kaz_admbnda_adm2_2024.prj} & \code{kaz_admbnda_adm2_2024.cpg};
 }
 \usage{
 data(kaz_adm2_sf)
 }
 \description{
-A \strong{MULTIPOLYGON} \code{sf} object including all districts (rayons) of Kazakhstan (2018 version).
-They contain Rayons of Oblast & City of Oblast Significance and also Rayons of City of
+A \strong{MULTIPOLYGON} \code{sf} object including all districts (rayons) of Kazakhstan (2024 version).
+They contain 226 Rayons of Oblast & City of Oblast Significance and also Rayons of City of
 Republican Significance. The borders of districts were corrected by Alexander Rodionov in
 \href{https://qgis.org/}{QGIS}.
 }
 \section{Figures}{
 
-\if{html}{\figure{Kazakhstan.png}{options: width=100\%}}  \% man/figures/Kazakhstan.png
-\if{latex}{\figure{Kazakhstan.png}{options: width=7.5in}}
+\if{html}{\figure{Kazakhstan2024.png}{options: width=100\%}}  \% man/figures/Kazakhstan2024.png
+\if{latex}{\figure{Kazakhstan2024.png}{options: width=7.5in}}
 }
 
 \examples{
@@ -192,7 +193,9 @@ leaflet::leaflet(data = sf::st_zm(geokz::kaz_adm1_sf, geometry)) \%>\%
 
 Other datasets with geographic features: 
 \code{\link{kaz_adm0_sf}},
+\code{\link{kaz_adm1_2018_sf}},
 \code{\link{kaz_adm1_sf}},
+\code{\link{kaz_adm2_2018_sf}},
 \code{\link{kaz_cnt1_sf}}
 }
 \concept{datasets with geographic features}

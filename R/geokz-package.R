@@ -1,10 +1,10 @@
-#' @title Kazakhstani administrative divisions & Centers as The Geographic features
+#' @title Kazakhstani Administrative Divisions & Centers as The Geographic features
 #'
 #' @description
 #'
-#' Kazakhstani administrative divisions 0, 1 and 2 levels and Centers as The Geographic features
+#' Kazakhstani Administrative Divisions 0, 1 and 2 levels and Centers as The Geographic features
 #'
-#' @docType package
+#' @keywords internal "_PACKAGE"
 #' @name geokz-package
 #' @import methods
 #' @import utils
@@ -14,7 +14,6 @@
 #' @importFrom utils read.csv str
 #'
 #' @section Functions:
-#'
 #'
 #' * [get_kaz_oblasts_map](get_kaz_oblasts_map.html) - Get Oblasts & Cities of Republican Significance of Kazakhstan
 #'   as `sf` polygons.
@@ -30,6 +29,8 @@
 #'     Cities of Republican Significance (`r prettyNum(nrow(base::subset(geokz::kaz_cnt1_sf, TYPE_CNT1 == 2 | TYPE_CNT1 == 4)))`)
 #'     and administrative centers(`r prettyNum(nrow(base::subset(geokz::kaz_cnt1_sf, (TYPE_CNT1 == 3))))`)
 #'      of regions (oblasts).
+#'   * **natural_zones**: Data.frame with descriptions of Natural zones for districts (rayons),
+#'     i.e. Administrative units 2 levels respectively.
 #'
 #'   Several languages in datasets is available.
 #'

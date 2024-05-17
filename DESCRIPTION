@@ -1,7 +1,7 @@
 Type: Package
 Package: geokz
 Title: Offers Various Kazakhstani Maps as Data Frames and 'sf' Objects
-Version: 0.0.0.9051
+Version: 1.0.0
 Authors@R: 
     person(given = "Alexander",
            family = "Rodionov",
@@ -41,5 +41,5 @@ VignetteBuilder:
     knitr
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.1
 Config/testthat/edition: 3

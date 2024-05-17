@@ -25,7 +25,7 @@ if (requireNamespace("tmap", quietly = TRUE)) {
 library(tmap)
 
 tmap::qtm(shp = kaz_adm0_sf, fill  = 'coral',
-          text = "ADM0_KK", text.col = "gray10", shadow = TRUE,
+          text = "ADM0_EN", text.col = "gray10", shadow = TRUE,
           border = 'red', frame = TRUE,
           title = "Kazakhstan: Administrative units level 0 (country)"
 
@@ -41,17 +41,9 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 
 library(ggplot2)
 
-ggplot2::qplot(
-  data = kaz_adm0_sf["ADM0_EN"],
-  geom  = "sf",
-  main = 'Kazakhstan: Administrative units level 0 (country)'
-)
-
-# ggplot2::ggplot(kaz_adm0_sf) +
-#   ggplot2::geom_sf(
-#     mapping = ggplot2::aes(fill = "ADM0_EN"),
-#     show.legend = FALSE
-#   )
+ggplot2::ggplot(kaz_adm0_sf) +
+  ggplot2::geom_sf(mapping = ggplot2::aes(fill="ADM0_EN"), show.legend=FALSE) +
+  ggplot2::ggtitle('Kazakhstan: Administrative units level 0 (country)')
 
 }  # The end for {ggplot2} package
 

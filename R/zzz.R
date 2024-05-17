@@ -1,10 +1,3 @@
-#' Prints package startup message
-#'
-#' This function is only called by R when attaching the package.
-#'
-# @param libname Name of library.
-# @param pkgname Name of package.
-# @return Nothing
 .onAttach <- function(libname, pkgname) {
   geokzVersion <- tryCatch(utils::packageDescription("geokz", fields = "Version"),
                             warning = function(w) return("alpha"),

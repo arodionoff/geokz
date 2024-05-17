@@ -1,11 +1,11 @@
 ## ADM2: Assigning polygons to correct multipolygons
 
-# Преобразование некорретно разнесенных участков MULTIPOLYGON к корректным адм.-теорр. единицам 2 уровня И
+# Преобразование некорретно разнесенных участков MULTIPOLYGON к корректным адм.-терр. единицам 2 уровня И
 # Удаление Z and/or M измерений в этих покрытиях
 
 # See Kazakhstan from United Nations Office for the Coordination of Humanitarian Affairs -
 # Subnational Administrative Boundaries from  -
-# https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy into '/maps'
+# https://data.humdata.org/dataset/cod-ab-kaz into '/maps'
 
 library('sf')               # Simple Features for R
 # library('data.table')       # Extension of `data.frame`

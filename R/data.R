@@ -13,14 +13,15 @@
 #' `MULTIPOLYGON` object of Kazakhstan (2018 version) without administrative divisions of the country itself.
 #'
 #' @source
-#' <https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy>, files
-#' `kaz_admbnda_adm0_2019.shp`, `kaz_admbnda_adm0_2019.shx`, `kaz_admbnda_adm0_2019.dbf`,
-#' `kaz_admbnda_adm0_2019.prj` & `kaz_admbnda_adm0_2019.cpg`.
+#' <https://data.humdata.org/dataset/cod-ab-kaz>, files
+#' `kaz_admbnda_adm0_2018.shp`, `kaz_admbnda_adm0_2018.shx`, `kaz_admbnda_adm0_2018.dbf`,
+#' `kaz_admbnda_adm0_2018.prj` & `kaz_admbnda_adm0_2018.cpg`.
 #'
 #' @usage data(kaz_adm0_sf)
 #'
 #' @format
-#' A `MULTIPOLYGON` data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
+#' A `MULTIPOLYGON` data frame (resolution: 1:1million, EPSG:4326 or
+#' WGS84 - World Geodetic System 1984) object with
 #' `r prettyNum(nrow(geokz::kaz_adm0_sf), big.mark=",")` rows and fields:
 #'   * KATO: Classifier of Administrative Territorial Objects (rus.
 #'       [KATO](https://data.egov.kz/datasets/view?index=kato)) - for contry is "000000000"
@@ -37,7 +38,8 @@
 #' @example inst/examples/kaz_adm0_sf.R
 NULL
 
-#' @title Map of All Administrative units level 1 (the principal units of a country) of Kazakhstan
+
+#' @title Map of All Administrative units level 1 (the principal units of a country) of Kazakhstan in 2024 Year
 #'
 #' @family datasets with geographic features
 #'
@@ -49,13 +51,12 @@ NULL
 #'
 #' @description
 #' A `sf` object including All Administrative units level 1 (the largest subnational units of a country)
-#' **MULTIPOLYGON** object of Kazakhstan (2018 version after the separation of Shymkent into a City of Republican
-#' Significance). It contains 14 regions, the Capital - Nur-Sultan (city) and 3 Cities of Republican Significance.
+#' **MULTIPOLYGON** objects of Kazakhstan in 2024 year. It contains in 5 January 2024 17 regions, the Capital - Nur-Sultan (city) and 3 Cities of Republican Significance.
 #'
 #' @source
-#' <https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy>, files
-#' `kaz_admbnda_adm1_2019.shp`, `kaz_admbnda_adm1_2019.shx`, `kaz_admbnda_adm1_2019.dbf`,
-#' `kaz_admbnda_adm1_2019.prj` & `kaz_admbnda_adm1_2019.cpg`.
+#' <https://data.humdata.org/dataset/cod-ab-kaz>, files of 2024 year
+#' `kaz_admbnda_adm1_2024.shp`, `kaz_admbnda_adm1_2024.shx`, `kaz_admbnda_adm1_2024.dbf`,
+#' `kaz_admbnda_adm1_2024.prj` & `kaz_admbnda_adm1_2024.cpg`.
 #'
 #' @usage data(kaz_adm1_sf)
 #'
@@ -72,8 +73,9 @@ NULL
 #'   * ADM1_KK: Name of Administrative units level 1 on Kazakh (Cyrillic) characters
 #'   * ADM1_RU: Name of Administrative units level 1 on Russian (Cyrillic) characters
 #'   * ADM1_PCODE: Two first characters of code according ISO 3166-2 ("KZ") + __AB__ characters of _KATO_ (two first characters from _TE_)
-#'   * ISO_3166_2: Codes for the principal subdivisions coded in [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ).
-#'   * geometry: geometry field (`sf` object)
+#'   * ISO_3166_2: Codes for the principal subdivisions coded in [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ)
+#'   * Year: Version of Administrative-territorial divisions of the country in 2024 year
+#'   * geometry: geometry field (`sf` object).
 #'
 #' @seealso [get_kaz_oblasts_map]
 #'
@@ -83,15 +85,62 @@ NULL
 NULL
 
 
-#' @title Map of All Administrative units level 2 (the district units of principal units) of Kazakhstan
+#' @title Map of All Administrative units level 1 (the principal units of a country) of Kazakhstan in 2018 Year
+#'
+#' @family datasets with geographic features
+#'
+#' @name kaz_adm1_2018_sf
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#'
+#' @description
+#' A `sf` object including All Administrative units level 1 (the largest subnational units of a country)
+#' **MULTIPOLYGON** objects of Kazakhstan in 2018 year. It contains in 19 June 2018 14 regions, the Capital - Astana (city) and 3 Cities of Republican Significance.
+#'
+#' @source
+#' <https://data.humdata.org/dataset/cod-ab-kaz>, files of 2018 year
+#' `kaz_admbnda_adm1_2018.shp`, `kaz_admbnda_adm1_2018.shx`, `kaz_admbnda_adm1_2018.dbf`,
+#' `kaz_admbnda_adm1_2018.prj` & `kaz_admbnda_adm1_2018.cpg`;
+#'
+#' @usage data(kaz_adm1_2018_sf)
+#'
+#' @format
+#' A `MULTIPOLYGON` data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
+#' `r prettyNum(nrow(geokz::kaz_adm1_2018_sf), big.mark=",")` rows and fields:
+#'   * KATO: Classifier of Administrative Territorial Objects (rus.
+#'       [KATO](https://data.egov.kz/datasets/view?index=kato))
+#'   * ADM0_EN: Name of country on Latin characters
+#'   * ADM0_KK: Name of country on Kazakh (Cyrillic) characters
+#'   * ADM0_RU: Name of country on Russian (Cyrillic) characters
+#'   * ADM0_PCODE: Two first characters of code according ISO 3166-2 ("KZ")
+#'   * ADM1_EN: Name of Administrative units level 1 on Latin characters
+#'   * ADM1_KK: Name of Administrative units level 1 on Kazakh (Cyrillic) characters
+#'   * ADM1_RU: Name of Administrative units level 1 on Russian (Cyrillic) characters
+#'   * ADM1_PCODE: Two first characters of code according ISO 3166-2 ("KZ") + __AB__ characters of _KATO_ (two first characters from _TE_)
+#'   * ISO_3166_2: Codes for the principal subdivisions coded in [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ)
+#'   * Year: Version of Administrative-territorial divisions of the country in 2018 year
+#'   * geometry: geometry field (`sf` object).
+#'
+#' @seealso [get_kaz_oblasts_map]
+#'
+#' [package vignette](../doc/making_maps.html#spatial_data) or `vignette("making_maps", package = "geokz")`
+#'
+#' @example inst/examples/kaz_adm1_2018_sf.R
+#'
+NULL
+
+
+#' @title Map of All Administrative units level 2 (the district units of principal units) of Kazakhstan in 2024 Year
 #'
 #' @family datasets with geographic features
 #'
 #' @name kaz_adm2_sf
 #'
 #' @description
-#' A **MULTIPOLYGON** `sf` object including all districts (rayons) of Kazakhstan (2018 version).
-#' They contain Rayons of Oblast & City of Oblast Significance and also Rayons of City of
+#' A **MULTIPOLYGON** `sf` object including all districts (rayons) of Kazakhstan (2024 version).
+#' They contain 226 Rayons of Oblast & City of Oblast Significance and also Rayons of City of
 #' Republican Significance. The borders of districts were corrected by Alexander Rodionov in
 #' [QGIS](https://qgis.org/).
 #'
@@ -100,9 +149,9 @@ NULL
 #' @keywords datasets
 #'
 #' @source
-#' <https://data.humdata.org/dataset/kazakhstan-administrative-boundaries-taxonomy>, files
-#' `kaz_admbnda_adm2_2019.shp`, `kaz_admbnda_adm2_2019.shx`, `kaz_admbnda_adm2_2019.dbf`,
-#' `kaz_admbnda_adm2_2019.prj` & `kaz_admbnda_adm2_2019.cpg`.
+#' <https://data.humdata.org/dataset/cod-ab-kaz>, files of 2024 year
+#' `kaz_admbnda_adm2_2024.shp`, `kaz_admbnda_adm2_2024.shx`, `kaz_admbnda_adm2_2024.dbf`,
+#' `kaz_admbnda_adm2_2024.prj` & `kaz_admbnda_adm2_2024.cpg`;
 #'
 #' @usage data(kaz_adm2_sf)
 #'
@@ -124,7 +173,65 @@ NULL
 #'   * ADM2_RU: Name of Administrative units level 2 on Russian (Cyrillic) characters
 #'   * ADM2_PCODE: Two first characters of code according ISO 3166-2 ("KZ") + (__AB__ characters of _KATO_ + __CD__ characters of _KATO_ + __EF__ characters of _KATO_) or six first characters from _TE_
 #'   * ISO_3166_2: Codes for the principal subdivisions coded in [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ).
-#'   * geometry: geometry field (`sf` object)
+#'   * Year: Versions of Administrative-territorial divisions of the country in 2024 year
+#'   * geometry: geometry field (`sf` object).
+#'
+#' @seealso [get_kaz_rayons_map]
+#'
+#' [package vignette](../doc/making_maps.html#spatial_data) or `vignette("making_maps", package = "geokz")`
+#'
+#' @section Figures:
+#' \if{html}{\figure{Kazakhstan2024.png}{options: width=100\%}}  % man/figures/Kazakhstan2024.png
+#' \if{latex}{\figure{Kazakhstan2024.png}{options: width=7.5in}}
+#'
+#' @example inst/examples/kaz_adm2_sf.R
+#'
+NULL
+
+
+#' @title Map of All Administrative units level 2 (the district units of principal units) of Kazakhstan in 2018 Year
+#'
+#' @family datasets with geographic features
+#'
+#' @name kaz_adm2_2018_sf
+#'
+#' @description
+#' A **MULTIPOLYGON** `sf` object including all districts (rayons) of Kazakhstan (2018 version).
+#' They contain 216 Rayons of Oblast & City of Oblast Significance and also Rayons of City of
+#' Republican Significance. The borders of districts were corrected by Alexander Rodionov in
+#' [QGIS](https://qgis.org/).
+#'
+#' @docType data
+#'
+#' @keywords datasets
+#'
+#' @source
+#' <https://data.humdata.org/dataset/cod-ab-kaz>, files of 2018 year
+#' `kaz_admbnda_adm2_2018.shp`, `kaz_admbnda_adm2_2018.shx`, `kaz_admbnda_adm2_2018.dbf`,
+#' `kaz_admbnda_adm2_2018.prj` & `kaz_admbnda_adm2_2018.cpg`;
+#'
+#' @usage data(kaz_adm2_2018_sf)
+#'
+#' @format
+#' A `MULTIPOLYGON` data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
+#' `r prettyNum(nrow(geokz::kaz_adm2_2018_sf), big.mark=",")` rows and fields:
+#'   * KATO: Classifier of Administrative Territorial Objects (rus.
+#'       [KATO](https://data.egov.kz/datasets/view?index=kato))
+#'   * ADM0_EN: Name of country on Latin characters
+#'   * ADM0_KK: Name of country on Kazakh (Cyrillic) characters
+#'   * ADM0_RU: Name of country on Russian (Cyrillic) characters
+#'   * ADM0_PCODE: Two first characters of code according ISO 3166-2 ("KZ")
+#'   * ADM1_EN: Name of Administrative units level 1 on Latin characters
+#'   * ADM1_KK: Name of Administrative units level 1 on Kazakh (Cyrillic) characters
+#'   * ADM1_RU: Name of Administrative units level 1 on Russian (Cyrillic) characters
+#'   * ADM1_PCODE: Two first characters of code according ISO 3166-2 ("KZ") + __AB__ characters of _KATO_ (two first characters from _TE_)
+#'   * ADM2_EN: Name of Administrative units level 2 on Latin characters
+#'   * ADM2_KK: Name of Administrative units level 2 on Kazakh (Cyrillic) characters
+#'   * ADM2_RU: Name of Administrative units level 2 on Russian (Cyrillic) characters
+#'   * ADM2_PCODE: Two first characters of code according ISO 3166-2 ("KZ") + (__AB__ characters of _KATO_ + __CD__ characters of _KATO_ + __EF__ characters of _KATO_) or six first characters from _TE_
+#'   * ISO_3166_2: Codes for the principal subdivisions coded in [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ).
+#'   * Year: Versions of Administrative-territorial divisions of the country in 2018 year
+#'   * geometry: geometry field (`sf` object).
 #'
 #' @seealso [get_kaz_rayons_map]
 #'
@@ -134,7 +241,7 @@ NULL
 #' \if{html}{\figure{Kazakhstan.png}{options: width=100\%}}  % man/figures/Kazakhstan.png
 #' \if{latex}{\figure{Kazakhstan.png}{options: width=7.5in}}
 #'
-#' @example inst/examples/kaz_adm2_sf.R
+#' @example inst/examples/kaz_adm2_2018_sf.R
 #'
 NULL
 
@@ -149,7 +256,7 @@ NULL
 #' A **POINT** `sf` object including the Capital Nur-Sultan (formerly Astana), 3 Cities of
 #' Republican Significance (Almaty, Shymkent and also Baikonur or Baykonyr, near is
 #' the World's First Spaceport) and all center of Oblasts (the principal units
-#' of a country) of Kazakhstan (2019 version).  The cities mapped by Alexander Rodionov in
+#' of a country) of Kazakhstan (2022 version).  The cities mapped by Alexander Rodionov in
 #' [QGIS](https://qgis.org/).
 #'
 #' @docType data
@@ -191,14 +298,14 @@ NULL
 NULL
 
 
-#' @title Administrative units level 2 of Kazakhstan by Zones according to the natural conditions
+#' @title Administrative units level 2 of Kazakhstan by Zones according to the natural conditions in 2020
 #'
 #' @family datasets with Natural Zones
 #'
 #' @name natural_zones
 #'
 #' @description
-#' A `data.frame` object including the list of Administrative units level 2 of Kazakhstan
+#' A `data.frame` object including the list of Administrative units level 2 of Kazakhstan (2018 Version)
 #' by Zones according to the natural conditions.
 #'
 #' @docType data

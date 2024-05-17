@@ -31,22 +31,48 @@ usethis::use_data(kaz_adm0_sf, overwrite = TRUE, compress = 'xz', version = 3)
 # MultiPolygon `sf` object for Kazakhstan's oblasts
 # Administrative unit level 1 - the largest subnational unit of a country
 agr = c(ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant",
-        ADM1_EN = "identity", ADM1_KK = "identity", ADM1_RU = "identity", ADM1_PCODE = "identity")
+        ADM1_EN = "identity", ADM1_KK = "identity", ADM1_RU = "identity", ADM1_PCODE = "identity",
+        Year = "identity")
 
-kaz_adm1_sf <- sf::st_read('maps/kaz_admbnda_adm1_2019.shp', agr = agr)    # Create 'sf' class from package 'sf'
+# Version 2018 Year
+kaz_adm1_2018_sf <- sf::st_read('maps/kaz_admbnda_adm1_2019.shp', agr = agr)    # Create 'sf' class from package 'sf'
 
-kaz_adm1_sf <-
-  dplyr::transmute( kaz_adm1_sf,
+kaz_adm1_2018_sf <-
+  dplyr::transmute( kaz_adm1_2018_sf,
     KATO       = paste0(substr(ADM1_PCODE, 3, 4), "0000000"),
     ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE,
     ISO_3166_2 = c("KZ-AKM", "KZ-AKT", "KZ-ALM", "KZ-ATY", "KZ-ZAP", "KZ-ZHA",
                    "KZ-KAR", "KZ-KUS", "KZ-KZY", "KZ-MAN", "KZ-PAV", "KZ-SEV",
-                   "KZ-YUZ", "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY")
+                   "KZ-YUZ", "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY"),
+    Year = 2018L
     )
+
+sf::st_agr(kaz_adm1_2018_sf) <-
+  factor( x = c(KATO = "identity", agr, ISO_3166_2 = "identity")
+        , levels = c("constant", "aggregate", "identity") )
+
+usethis::use_data(kaz_adm1_2018_sf, overwrite = TRUE, compress = 'xz', version = 3)
+
+# Version 2024 Year
+kaz_adm1_sf <- sf::st_read('maps/kaz_admbnda_adm1_2024.shp', agr = agr)    # Create 'sf' class from package 'sf'
+
+kaz_adm1_sf <-
+  dplyr::transmute( kaz_adm1_sf,
+                    KATO       = paste0(substr(ADM1_PCODE, 3, 4), "0000000"),
+                    ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE,
+                    ISO_3166_2 = c("KZ-ABY",
+                                   "KZ-AKM", "KZ-AKT", "KZ-ALM", "KZ-ATY", "KZ-ZAP", "KZ-ZHA",
+                                   "KZ-ZHT",
+                                   "KZ-KAR", "KZ-KUS", "KZ-KZY", "KZ-MAN", "KZ-PAV", "KZ-SEV",
+                                   "KZ-YUZ",
+                                   "KZ-ULT",
+                                   "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY"),
+                    Year = 2024L
+  )
 
 sf::st_agr(kaz_adm1_sf) <-
   factor( x = c(KATO = "identity", agr, ISO_3166_2 = "identity")
-        , levels = c("constant", "aggregate", "identity") )
+          , levels = c("constant", "aggregate", "identity") )
 
 usethis::use_data(kaz_adm1_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
@@ -55,17 +81,20 @@ usethis::use_data(kaz_adm1_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 agr = c(ADM0_EN = "constant", ADM0_KK = "constant", ADM0_RU = "constant", ADM0_PCODE = "constant",
         ADM1_EN = "constant", ADM1_KK = "constant", ADM1_RU = "constant", ADM1_PCODE = "constant",
-        ADM2_EN = "identity", ADM2_KK = "identity", ADM2_RU = "identity", ADM2_PCODE = "identity")
+        ADM2_EN = "identity", ADM2_KK = "identity", ADM2_RU = "identity", ADM2_PCODE = "identity",
+        Year = "identity")
 
-kaz_adm2_sf <- sf::st_read('maps/kaz_admbnda_adm2_2021.shp', agr = agr)    # Create 'sf' class from package 'sf'
+# Version 2018 Year
+kaz_adm2_2018_sf <- sf::st_read('maps/kaz_admbnda_adm2_2021.shp', agr = agr)    # Create 'sf' class from package 'sf'
 # kaz_adm2_sf <-                                                 # 26 times more slower
 #   sf::st_join( x = kaz_adm2_sf,
 #                y = dplyr::select(kaz_adm1_sf, ISO_3166_2),
 #                left = TRUE )
-kaz_adm2_sf <-
-  dplyr::inner_join( x = kaz_adm2_sf,
-                     y = dplyr::select(kaz_adm1_sf, ADM1_PCODE, ISO_3166_2) %>%
-                            sf::st_drop_geometry(),
+kaz_adm2_2018_sf <-
+  dplyr::inner_join( x = kaz_adm2_2018_sf,
+                     y = dplyr::select(kaz_adm1_2018_sf, ADM1_PCODE, ISO_3166_2, Year) %>%
+                           dplyr::filter( Year == 2018L ) %>%
+                             sf::st_drop_geometry(),
                      by = c('ADM1_PCODE' = 'ADM1_PCODE')
                    ) %>%
     dplyr::transmute(
@@ -73,13 +102,43 @@ kaz_adm2_sf <-
       ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE,
       ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE,
       ADM2_EN, ADM2_KK, ADM2_RU, ADM2_PCODE,
-      ISO_3166_2
+      ISO_3166_2, Year
     ) %>%
     dplyr::arrange(KATO)  # Change order of Turkistani Cities
 
-sf::st_agr(kaz_adm2_sf) <-
+sf::st_agr(kaz_adm2_2018_sf) <-
   factor( x = c(KATO = "identity", agr, ISO_3166_2 = "constant")
         , levels = c("constant", "aggregate", "identity") )
+
+usethis::use_data(kaz_adm2_2018_sf, overwrite = TRUE, compress = 'xz', version = 3)
+
+# Version 2024 Year
+kaz_adm2_sf <- sf::st_read('maps/kaz_admbnda_adm2_2024.shp', agr = agr)     # Create 'sf' class from package 'sf'
+
+kaz_adm2_sf <-
+  dplyr::inner_join( x = kaz_adm2_sf,
+                     y = dplyr::select(kaz_adm1_sf, ADM1_PCODE, ISO_3166_2, Year) %>%
+                       dplyr::filter( Year == 2024L ) %>%
+                       sf::st_drop_geometry(),
+                     by = c('ADM1_PCODE' = 'ADM1_PCODE')
+  ) %>%
+  dplyr::transmute(
+    KATO       = paste0(substr(ADM2_PCODE, 3, 8), "000"),
+    ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE,
+    ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE,
+    ADM2_EN, ADM2_KK, ADM2_RU, ADM2_PCODE,
+    ISO_3166_2, Year
+  ) %>%
+  dplyr::arrange(KATO)  # Change order of Turkistani Cities
+
+sf::st_agr(kaz_adm2_sf) <-
+  factor( x = c(KATO = "identity", agr, ISO_3166_2 = "constant")
+          , levels = c("constant", "aggregate", "identity") )
+
+# Correct Geometry field
+kaz_adm2_sf <-
+  kaz_adm2_sf %>%
+    sf::st_make_valid()                       # see https://github.com/r-spatial/sf/issues/1902
 
 usethis::use_data(kaz_adm2_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
@@ -87,23 +146,27 @@ usethis::use_data(kaz_adm2_sf, overwrite = TRUE, compress = 'xz', version = 3)
 
 agr = c(KATO = "identity", NAME_KK = "identity", NAME_RU = "identity", NAME_EN = "identity")
 
-kaz_cnt1_sf <- sf::st_read('maps/kaz_admcntr_adm1_2018.shp', agr = agr)  # Create 'sf' class from package 'sf'
+kaz_cnt1_sf <- sf::st_read('maps/kaz_admcntr_adm1_2022.shp', agr = agr)  # Create 'sf' class from package 'sf'
 kaz_cnt1_sf <-
   dplyr::mutate( kaz_cnt1_sf,
-      TYPE_CNT1 = dplyr::case_when(  # c(rep(3L, times = 14L), 1L, 2L, 2L, 4L),
+        TYPE_CNT1 = dplyr::case_when(  # c(rep(3L, times = 14L), 1L, 2L, 2L, 4L),
         KATO               == "710000000" ~ 1L, # Nur-Sultan - The Capital
         # base::substr(KATO, 3, 9) ==   "0000000" ~ 2L  # Cities of Republican Significance
         KATO               == "431900000" ~ 4L, # Baykonyr - the World's First Spaceport
         TRUE                              ~ 3L  #  Center of Administrative unit level 1
       ),
-      ISO_3166_2 =
-        c("KZ-AKM", "KZ-AKT", "KZ-ALM", "KZ-ATY", "KZ-ZAP", "KZ-ZHA", "KZ-KAR",
-          "KZ-KUS", "KZ-KZY", "KZ-BAY", "KZ-MAN", "KZ-PAV", "KZ-SEV", "KZ-YUZ",
-          "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY") ) %>%
+      ISO_3166_2 = c("KZ-ABY",
+                     "KZ-AKM", "KZ-AKT", "KZ-ALM", "KZ-ATY", "KZ-ZAP", "KZ-ZHA",
+                     "KZ-ZHT",
+                     "KZ-KAR", "KZ-KUS", "KZ-KZY", "KZ-BAY", "KZ-MAN", "KZ-PAV", "KZ-SEV",
+                     "KZ-YUZ",
+                     "KZ-ULT",
+                     "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY") ) %>%
   sf::st_join(
     x = .,
     y = dplyr::select(kaz_adm1_sf, ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE,
-                      ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE),
+                      ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE, Year) %>%
+          dplyr::filter( Year == 2024L ),
     left = TRUE
   ) %>%
   dplyr::transmute(
@@ -114,7 +177,7 @@ kaz_cnt1_sf <-
   )
 
 kaz_cnt1_sf$TYPE_CNT1 <-
-  ifelse( kaz_cnt1_sf$KATO != "710000000" & # Nur-Sultan - The Capital
+  ifelse( kaz_cnt1_sf$KATO != "710000000" & # Astana - The Capital
           substr(kaz_cnt1_sf$KATO, 3, 9) ==   "0000000", # Cities of Republican Significance
           2L, kaz_cnt1_sf$TYPE_CNT1 )
 

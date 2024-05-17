@@ -3,7 +3,7 @@
 \docType{data}
 \name{natural_zones}
 \alias{natural_zones}
-\title{Administrative units level 2 of Kazakhstan by Zones according to the natural conditions}
+\title{Administrative units level 2 of Kazakhstan by Zones according to the natural conditions in 2020}
 \format{
 A data frame object with 216 rows and fields:
 \itemize{
@@ -24,7 +24,7 @@ A data frame object with 216 rows and fields:
 data(natural_zones)
 }
 \description{
-A \code{data.frame} object including the list of Administrative units level 2 of Kazakhstan
+A \code{data.frame} object including the list of Administrative units level 2 of Kazakhstan (2018 Version)
 by Zones according to the natural conditions.
 }
 \examples{
