@@ -14,13 +14,13 @@ sf::st_write(obj = sf::st_zm(kaz_adm0_sf), dsn = 'inst/shape/kaz_admbnda_adm0_20
 
 # Version 2018 Year
 load(file = "data/kaz_adm1_2018_sf.rda")
-sf::st_write( obj = sf::st_zm(kaz_adm1_2018_sf) # %>% dplyr::filter( Year == 2018L )
+sf::st_write( obj = sf::st_zm(kaz_adm1_2018_sf) # |> dplyr::filter( Year == 2018L )
             , dsn = 'inst/shape/kaz_admbnda_adm1_2018.shp'
             , driver = 'ESRI Shapefile', layer_options = 'ENCODING=UTF-8', delete_layer = TRUE )
 
 # Version 2024 Year
 load(file = "data/kaz_adm1_sf.rda")
-sf::st_write( obj = sf::st_zm(kaz_adm1_sf) # %>% dplyr::filter( Year == 2024L )
+sf::st_write( obj = sf::st_zm(kaz_adm1_sf) # |> dplyr::filter( Year == 2024L )
               , dsn = 'inst/shape/kaz_admbnda_adm1_2024.shp'
               , driver = 'ESRI Shapefile', layer_options = 'ENCODING=UTF-8', delete_layer = TRUE )
 
@@ -28,17 +28,18 @@ sf::st_write( obj = sf::st_zm(kaz_adm1_sf) # %>% dplyr::filter( Year == 2024L )
 
 # Version 2018 Year
 load(file = "data/kaz_adm2_2018_sf.rda")
-sf::st_write( obj = kaz_adm2_2018_sf # %>% dplyr::filter( Year == 2018L )
+sf::st_write( obj = kaz_adm2_2018_sf # |> dplyr::filter( Year == 2018L )
             , dsn = 'inst/shape/kaz_admbnda_adm2_2018.shp'
             , driver = 'ESRI Shapefile', layer_options = 'ENCODING=UTF-8', delete_layer = TRUE)
 
 # Version 2024 Year
 load(file = "data/kaz_adm2_sf.rda")
-sf::st_write( obj = kaz_adm2_sf # %>% dplyr::filter( Year == 2024L )
-              , dsn = 'inst/shape/kaz_admbnda_adm2_2024.shp'
-              , driver = 'ESRI Shapefile', layer_options = 'ENCODING=UTF-8', delete_layer = TRUE)
+sf::st_write( obj = kaz_adm2_sf # |> dplyr::filter( Year == 2024L )
+            , dsn = 'inst/shape/kaz_admbnda_adm2_2024.shp'
+            , driver = 'ESRI Shapefile', layer_options = 'ENCODING=UTF-8', delete_layer = TRUE)
 
 # CNT1: Administrative centers level 1 of Kazakhstan
 load(file = "data/kaz_cnt1_sf.rda")
-sf::st_write(obj = kaz_cnt1_sf, dsn = 'inst/shape/kaz_admbnda_cnt1_2022.shp',
-             driver = 'ESRI Shapefile', layer_options = 'ENCODING=UTF-8', delete_layer = TRUE)
+sf::st_write( obj = kaz_cnt1_sf
+            , dsn = 'inst/shape/kaz_admbnda_cnt1_2022.shp'
+            , driver = 'ESRI Shapefile', layer_options = 'ENCODING=UTF-8', delete_layer = TRUE)

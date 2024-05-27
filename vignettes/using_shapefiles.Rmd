@@ -49,9 +49,9 @@ library(dplyr)
 library(sf)
 
 IQR <- data(package = "geokz")
-dplyr::as_tibble(IQR$results) %>% 
-  dplyr::select(Item, Title) %>% 
-    dplyr::filter(row_number() != n()) %>% # drop on `natural_zones` w/o shapefile
+dplyr::as_tibble(IQR$results) |> 
+  dplyr::select(Item, Title) |> 
+    dplyr::filter(row_number() != n()) |> # drop on `natural_zones` w/o shapefile
       dplyr::transmute(File = list.files(path = system.file("shape", package = "geokz"), pattern = "*.shp"),
                        Item, Title)
 
@@ -75,8 +75,8 @@ glimpse(kaz_ADM1_sf)
 Load geographic coverage by Oblasts of the country from shapefiles in subdirectory `shape`.
 
 ```{r kaz_adm1_sf_key_count}
-kaz_ADM1_sf %>%
-  sf::st_drop_geometry() %>% 
+kaz_ADM1_sf |>
+  sf::st_drop_geometry() |> 
     dplyr::count(ADM1_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ISO_3166_2)
 ```
 
@@ -85,15 +85,15 @@ With these Oblast keys you can easily filter Oblasts for plotting or you can lis
 ```{r plot map, fig.height = 4, fig.width = 7}
 
 kaz_ADM1_sf <- 
-  kaz_ADM1_sf %>% 
+  kaz_ADM1_sf |> 
     dplyr::mutate(Regions = dplyr::case_when(
       ADM1_PCODE %in% c("KZ11", "KZ39", "KZ55", "KZ59", "KZ71") ~ "North",
       ADM1_PCODE %in% c("KZ15", "KZ23", "KZ27", "KZ47")         ~ "West",
       ADM1_PCODE %in% c("KZ35", "KZ62")                         ~ "Center",
       ADM1_PCODE %in% c("KZ10", "KZ63")                         ~ "East",
       TRUE                                                      ~ "South"      
-    ) %>% 
-      factor(., levels = c("North", "West", "Center", "East", "South")))
+    ) |> 
+      factor(levels = c("North", "West", "Center", "East", "South")))
 
 tmap::qtm(
   shp = kaz_ADM1_sf, 

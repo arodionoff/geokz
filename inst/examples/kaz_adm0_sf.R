@@ -66,18 +66,18 @@ data.frame(
            "https://en.wikipedia.org/wiki/Almaty"),
   lat = c(51.166667, 43.2775),
   lon = c(71.433333, 76.8958)
-) %>%
+) |>
   sf::st_as_sf(
     coords = c("lon", "lat"), # columns with geometry by x - "lon" and y - "lat"
     crs = "+proj=longlat +datum=WGS84"
-    ) %>%
-leaflet::leaflet(data = .) %>%                           # Create leaflet object
-  leaflet::addProviderTiles(provider = "Wikimedia") %>%  # Add basemap
+    ) |>
+leaflet::leaflet() |>                           # Create leaflet object
+  leaflet::addProviderTiles(provider = "Wikimedia") |>   # Add basemap
   leaflet::addPolygons(                                  # Add data layer - polygon
-    data = geokz::kaz_adm0_sf %>% sf::st_zm(geometry),   # Drop or add Z and/or M dimensions
+    data = geokz::kaz_adm0_sf |> sf::st_zm(geometry),    # Drop or add Z and/or M dimensions
     fill = NA,
     color = "grey"
-    ) %>%
+    ) |>
   leaflet::addCircleMarkers(                             # Add data layer - markers
     color = "red",
     opacity = 0.5,

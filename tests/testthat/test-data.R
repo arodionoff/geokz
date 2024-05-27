@@ -274,8 +274,8 @@ testthat::test_that("geokz::natural_zones dataset for Zone of Administrative uni
 testthat::test_that("natural_zones_df dataset for Zone of Administrative units level 2
                     according to natural conditions can be loaded", {
 
-  x <- system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) %>%
-    utils::read.csv(file = ., encoding = "UTF-8")
+  x <- system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) |>
+    utils::read.csv(encoding = "UTF-8")
   x$KATO <- as.character(x$KATO)
 
   testthat::expect_true(is.data.frame(x))

@@ -55,9 +55,9 @@ if (requireNamespace(c("ggplot2", "dplyr"), quietly = TRUE)) {
 library(ggplot2)
 library(dplyr)
 
-kaz_adm1_sf %>%
-  dplyr::mutate(ADM1_EN = factor(ADM1_EN, levels = ADM1_EN)) %>%
-  ggplot2::ggplot(data = .) +
+kaz_adm1_sf |>
+  dplyr::mutate(ADM1_EN = factor(ADM1_EN, levels = ADM1_EN)) |>
+  ggplot2::ggplot() +
     ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM1_EN)) +
     ggplot2::geom_sf_text(mapping = ggplot2::aes(label = ADM1_EN)) +
     ggplot2::theme_bw() +
@@ -97,7 +97,7 @@ points <-
              "https://en.wikipedia.org/wiki/Almaty"),
     lat = c(51.166667, 43.2775),
     lon = c(71.433333, 76.8958)
-  ) %>%
+  ) |>
   sf::st_as_sf(
     coords = c("lon", "lat"), # columns with geometry by x - "lon" and y - "lat"
     crs = "+proj=longlat +datum=WGS84"
@@ -112,10 +112,10 @@ epsg102027 <- leaflet::leafletCRS(
   resolutions = 2^(16:7))
 
 leaflet::leaflet(
-  geokz::kaz_adm1_sf %>% sf::st_transform(crs = "+proj=longlat +datum=WGS84") %>%
+  geokz::kaz_adm1_sf |> sf::st_transform(crs = "+proj=longlat +datum=WGS84") |>
                             sf::st_zm(geometry),
   options = leafletOptions(crs = epsg102027)
-  ) %>%
+  ) |>
   leaflet::addPolygons(
     weight = 2,
     color = "grey",
@@ -125,7 +125,7 @@ leaflet::leaflet(
     smoothFactor = 0.5,
     label = ~paste(ADM1_KK, ":", KATO),
     labelOptions = labelOptions(direction = "auto")
-    ) %>%
+    ) |>
   leaflet::addCircleMarkers(
     data = points,
     color = "red",

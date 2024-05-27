@@ -1,3 +1,17 @@
+# geokz 1.0.1
+
+## Major improvements
+
+* Replacement made `%>%` from {magrittr} package into native operator `|>` since R version 4.1.0.
+
+* Clarification of the boundaries of Alatau city & neighboring Rayons of Almaty Oblast.
+
+* Clarification of the boundaries of Arkalyk city & neighboring Rayon of Kostanay Oblast.
+
+## Minor improvements
+
+* Fixed bugs and mistakes in texts.
+
 # geokz 1.0.0
 
 ## Major improvements

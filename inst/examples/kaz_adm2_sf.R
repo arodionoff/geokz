@@ -81,10 +81,10 @@ library(ggplot2)
 library(RColorBrewer)
 library(dplyr)
 
-kaz_adm2_sf %>%
-  dplyr::filter(ADM1_EN =="Mangystau") %>%
-  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) %>%
-  ggplot2::ggplot(data = .) +
+kaz_adm2_sf |>
+  dplyr::filter(ADM1_EN =="Mangystau") |>
+  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) |>
+  ggplot2::ggplot() +
     ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM2_EN)) +   # forcats::fct_inorder(ADM2_EN)
     ggplot2::geom_sf_text(
       mapping = ggplot2::aes(label = ADM2_EN),
@@ -113,8 +113,8 @@ library(magrittr)
 
 pal <- leaflet::colorNumeric("Pastel2", domain =as.integer(kaz_adm1_sf$KATO))
 
-leaflet::leaflet(data = sf::st_zm(geokz::kaz_adm1_sf, geometry)) %>%
-  leaflet::addProviderTiles(provider = "Esri.WorldShadedRelief") %>%
+leaflet::leaflet(data = sf::st_zm(geokz::kaz_adm1_sf, geometry)) |>
+  leaflet::addProviderTiles(provider = "Esri.WorldShadedRelief") |>
   leaflet::addPolygons(
     weight = 2,
     color = "darkred",
@@ -122,7 +122,7 @@ leaflet::leaflet(data = sf::st_zm(geokz::kaz_adm1_sf, geometry)) %>%
     fillColor = ~pal(as.integer(KATO)),
     fillOpacity = 0.3,
     smoothFactor = 0.5,
-  ) %>%
+  ) |>
   leaflet::addPolygons(
     data = geokz::kaz_adm2_sf,
     weight = 1,

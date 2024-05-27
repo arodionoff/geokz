@@ -49,8 +49,8 @@ library(dplyr)
 library(sf)
 
 IQR <- data(package = "geokz")
-dplyr::as_tibble(IQR$results) %>% 
-  dplyr::select(Item, Title) %>% 
+dplyr::as_tibble(IQR$results) |>
+  dplyr::select(Item, Title) |> 
     dplyr::filter(grepl("kaz_adm1_sf", Item))
 ```
 
@@ -63,8 +63,8 @@ names(geokz::kaz_adm1_sf)
 With these Oblast keys you can easily filter Oblasts for plotting or you can list different regional (Multi-Oblast) breakdowns.
 
 ```{r kaz_adm1_sf_key_count}
-geokz::kaz_adm1_sf %>%
-  sf::st_drop_geometry() %>% 
+geokz::kaz_adm1_sf |>
+  sf::st_drop_geometry() |> 
     dplyr::count(ADM1_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ISO_3166_2)
 ```
 
@@ -80,8 +80,8 @@ Note, the large cities with more than 400 thousand inhabitants (now, Aktobe and 
 
 ```{r kaz_adm2_sf}
 IQR <- data(package = "geokz")
-dplyr::as_tibble(IQR$results) %>% 
-  dplyr::select(Item, Title) %>% 
+dplyr::as_tibble(IQR$results) |> 
+  dplyr::select(Item, Title) |> 
     dplyr::filter(grepl("kaz_adm2_sf", Item))
 ```
 
@@ -94,8 +94,8 @@ names(geokz::kaz_adm2_sf)
 With these rayon keys you can easily aggregate rayons for plotting or you can list different regional (Oblast) breakdowns.
 
 ```{r kaz_adm2_sf_key_count}
-geokz::kaz_adm2_sf %>%
-  sf::st_drop_geometry() %>% 
+geokz::kaz_adm2_sf |>
+  sf::st_drop_geometry() |> 
     dplyr::count(ADM1_PCODE, ADM1_EN, ADM1_KK, ADM1_RU, ISO_3166_2)
 ```
 
@@ -103,7 +103,7 @@ geokz::kaz_adm2_sf %>%
 
 ## Administrative units level 3 keys
 
-There is a three-level administrative division in Kazakhstan. Akimats of villages, rural and settlement districts, cities of district (Aktobe & Karaganda) and regional significance belong to units of administrative-territorial division of **the third level.** There were 2352 administrative-territorial units of the third level in 2022 year: 48 akimats of cities of district significance, 4 akimats of districts in cities of regional significance, 29 akimats of village districts, 2179 akimats of rural districts, 92 rural akimats.
+There is a three-level administrative division in Kazakhstan. Akimats of villages, rural and settlement districts, cities of district (Aktobe & Karaganda) and regional significance belong to units of administrative-territorial division of **the third level.** There were 2169 administrative-territorial units 3 level in 2024 year and subordinate villages - 6256.
 
 ## Centers of Administrative units level 2
 
@@ -149,10 +149,10 @@ Use can use names of Regions in different languages (English, Russian or Kazakh)
 
 ```{r Non-latin characters}
 x <- "\u0410\u0441\u0442\u0430\u043d\u0430 (\u049b\u0430\u043b\u0430)"
-get_kaz_oblasts_map(ADM1_KK = x) %>%
-  dplyr::select("KATO", "ADM1_EN", "ADM1_KK", "ADM1_RU", "ADM1_PCODE", "ISO_3166_2") %>% 
-    sf::st_drop_geometry() %>% 
-      knitr::kable(., caption = "Administrative unit level 1 - \nThe Capital (kaz. <b>'\u0410\u0441\u0442\u0430\u043d\u0430 (\u049b\u0430\u043b\u0430)'</b>")
+get_kaz_oblasts_map(ADM1_KK = x) |>
+  dplyr::select("KATO", "ADM1_EN", "ADM1_KK", "ADM1_RU", "ADM1_PCODE", "ISO_3166_2") |> 
+    sf::st_drop_geometry() |> 
+      knitr::kable(caption = "Administrative unit level 1 - \nThe Capital (kaz. <b>'\u0410\u0441\u0442\u0430\u043d\u0430 (\u049b\u0430\u043b\u0430)'</b>")
 
 ```
 
@@ -198,30 +198,7 @@ The cities mapped by Alexander Rodionov in [QGIS](https://qgis.org/).
 
 This vignettes provides few examples on how to join attribute data from common sources of attribute data. Here we are using data from two different sources of [The Bureau of National Statistics](https://stat.gov.kz/about/general/regulation) of the Agency for Strategic Planning and Reforms of the Republic of Kazakhstan: [the Population of the Republic of Kazakhstan](https://stat.gov.kz/api/getFile/?docId=ESTAT431598) and the Area of [Kazakhstani Regions](https://en.wikipedia.org/wiki/Regions_of_Kazakhstan). Third is [Zones of Kazakhstan are distinguished according to natural conditions](https://adilet.zan.kz/rus/docs/V2000021691#z70).
 
-#### Population Density of Kazakhstan (2021)
-
-<!-- Demographic statistics of **Kazakhstan** -->
-
-<!-- | Regions | Center | Area, sq. km | Population, 2021 | Population density | [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2:KZ) Code | -->
-<!-- |---|---|---|---|---|---| -->
-<!-- | Akmola Region | [Kokshetau](https://en.wikipedia.org/wiki/Kokshetau) | 146 219 | 735 481 | 5.0 | KZ-AKM | -->
-<!-- | Aktobe Region | [Aktobe](https://en.wikipedia.org/wiki/Aktobe) | 300 629 | 893 669 | 3.0 | KZ-AKT | -->
-<!-- | Almaty Region | [Taldykorgan](https://en.wikipedia.org/wiki/Taldykorgan) | 223 924 | 2 077 656 | 9.3 | KZ-ALM | -->
-<!-- | Atyrau Region | [Atyrau](https://en.wikipedia.org/wiki/Atyrau) | 118 631 | 657 118 |5.5 | KZ-ATY | -->
-<!-- | East Kazakhstan Region | [Oskemen](https://en.wikipedia.org/wiki/Oskemen) | 283 226 | 661 172	| 2.3 | KZ-VOS | -->
-<!-- | Jambyl Region | [Taraz](https://en.wikipedia.org/wiki/Taraz) | 144 264 | 1 139 151 | 7.9 | KZ-ZHA | -->
-<!-- | Karaganda Region | [Karaganda](https://en.wikipedia.org/wiki/Karaganda) | 427 982 | 1 375 788 |	3.2 | KZ-KAR | -->
-<!-- | Kostanay Region | [Kostanay](https://en.wikipedia.org/wiki/Kostanay) | 196 001 | 864 529 | 4.4 | KZ-KUS | -->
-<!-- | Kyzylorda Region | [Kyzylorda](https://en.wikipedia.org/wiki/Kyzylorda) | 226 019 | 814 461	| 3.6 | KZ-KZY | -->
-<!-- | _Baykonyr_ | [Baykonyr](https://en.wikipedia.org/wiki/Baikonur) |57 | 77 0019 | 1 351.2  | KZ-BAY | -->
-<!-- | Mangystau Region | [Aktau](https://en.wikipedia.org/wiki/Aktau) | 165 642 | 719 | 559	4.3  | KZ-MAN | -->
-<!-- | North Kazakhstan Region | [Petropavl](https://en.wikipedia.org/wiki/Petropavl) | 97 993 | 751 011	| 7.7 | KZ-SEV | -->
-<!-- | Pavlodar Region | [Pavlodar](https://en.wikipedia.org/wiki/Pavlodar) | 124 800 |543 679 |	4.4 | KZ-PAV | -->
-<!-- | Turkistan Region | [Turkistan](https://en.wikipedia.org/wiki/Turkistan_(city)) | 117 249 |2 044 551	| 17.4 | KZ-TUR | -->
-<!-- | West Kazakhstan Region | [Oral](https://en.wikipedia.org/wiki/Oral,_Kazakhstan) | 151 339 | 1 363 656 |	9.0 | KZ-ZAP| -->
-<!-- | _Nur-Sultan_ | [Nur-Sultan](https://en.wikipedia.org/wiki/Nur-Sultan) | 710 | 1 184 469	| 1 668.3 | KZ-AST | -->
-<!-- | _Almaty_ | [Almaty](https://en.wikipedia.org/wiki/Almaty) | 319 | 1 977 011	| 6 197.5| KZ-ALA | -->
-<!-- | _Shymkent_ | [Shymkent](https://en.wikipedia.org/wiki/Shymkent) | 1170 | 1 074 167	918.1 | KZ-SHY | -->
+#### Population Density of Kazakhstan (2024)
 
 ```{r Population density, fig.height = 4, fig.width = 7}
 
@@ -238,7 +215,7 @@ Population_Density_df <-
 "Astana (city)", "Almaty (city)", "Shymkent (city)"),
     Area = c(185500, 146219, 300629, 105100, 118631, 151339, 144264, 118500, 239100, 196001, 226019, 165642, 124800, 97993, 116100, 188900, 97700, 797, 682, 1163),
     Population = c(610183, 786012, 924845, 1497025, 689674, 686655, 1215482, 698952, 1134146, 832445, 830901, 761401, 754829, 534966, 2110502, 221014, 730818, 1340782, 2147113, 1184113)
-) %>% 
+) |> 
   dplyr::mutate(Population_Density = round( Population / Area, 1))
 
 knitr::kable(Population_Density_df, caption = 'Demographic statistics of <b>Kazakhstan</b>',
@@ -246,16 +223,15 @@ knitr::kable(Population_Density_df, caption = 'Demographic statistics of <b>Kaza
 
 dplyr::inner_join( x = get_kaz_oblasts_map(),
                    y = Population_Density_df[, c("ISO_3166_2", "Population_Density")],
-                   by = c("ISO_3166_2" = "ISO_3166_2") ) %>% 
+                   by = c("ISO_3166_2" = "ISO_3166_2") ) |> 
   tmap::qtm(
-    shp = ., 
     fill = "Population_Density", 
     fill.n = 6,
     fill.style = "quantile",
     fill.text  = "Population_Density",
     fill.title = "Population Density \n(people per sq.km)",
     text = "Population_Density",
-    title = "Population Density of Kazakhstan (2022)",
+    title = "Population Density of Kazakhstan (2024)",
     format = "World"
     )
 
@@ -268,17 +244,16 @@ The territory of Kazakhstan is located in four climatic zones - forest-steppe, s
 ```{r Natural Zones, fig.height=4, fig.width=7}
 data(natural_zones)
 
-natural_zones %>% 
-  dplyr::count(ZONE_EN) %>%
-    dplyr::bind_rows(., data.frame( ZONE_EN = "TOTAL", n = nrow(natural_zones))) %>% 
-      knitr::kable(., 
-         caption = "Administrative units level 2 by Zones according to <b>natural conditions</b>",
-         format.args = list(big.mark = ' '))
+natural_zones |> 
+  dplyr::count(ZONE_EN) |>
+    dplyr::bind_rows(data.frame( ZONE_EN = "TOTAL", n = nrow(natural_zones))) |> 
+      knitr::kable(caption = "Administrative units level 2 by Zones according to <b>natural conditions</b>",
+                   format.args = list(big.mark = ' '))
 
 dplyr::inner_join( x = get_kaz_rayons_map(Year = 2018L),
                    y = natural_zones[, c("ADM2_PCODE", "ZONE_EN")],
-                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) %>%
-tmap::tm_shape(shp = .) +
+                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) |>
+tmap::tm_shape() +
   tmap::tm_polygons(
     col = "ZONE_EN",
     title = "Zones according \nto natural conditions"
@@ -303,8 +278,8 @@ if (natural_zones_df == "") {
   natural_zones_df <- utils::read.csv(paste0("inst/extdata/", "kaz_zones.csv"), encoding = "UTF-8")
 } else {
   natural_zones_df <- 
-    system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) %>% 
-      utils::read.csv(file = ., encoding = "UTF-8")
+    system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) |> 
+      utils::read.csv(encoding = "UTF-8")
 }
 
 Zones_EN_labels <- 
@@ -312,15 +287,15 @@ Zones_EN_labels <-
     "South Siberian mountain and foothill", "Semi-desert")
 
 Zones_pallete <- c("yellowgreen", "khaki", "darkolivegreen1", "peachpuff2",
-                   "olivedrab", "navajowhite") %>% 
+                   "olivedrab", "navajowhite") |> 
   stats::setNames(Zones_EN_labels)
 
-dplyr::inner_join( x = get_kaz_rayons_map(),
+dplyr::inner_join( x = get_kaz_rayons_map( Year = 2018L ),
                    y = natural_zones_df[, c("ADM2_PCODE", "ZONE_EN")],
-                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) %>%
+                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) |>
   dplyr::mutate(KATO = as.character(KATO),
-                ZONE_EN = factor(ZONE_EN, levels = Zones_EN_labels)) %>% 
-ggplot2::ggplot(data = .) +
+                ZONE_EN = factor(ZONE_EN, levels = Zones_EN_labels)) |> 
+ggplot2::ggplot() +
   ggplot2::geom_sf(mapping = ggplot2::aes(fill = ZONE_EN)) +  # Rayons - Zones by natural conditions
   ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
     data  = sf::st_geometry(get_kaz_oblasts_map()),
@@ -354,15 +329,15 @@ Torgay_Region <-
   get_kaz_rayons_map(ADM2_EN = c(
     "Esil",
     "Zhaksy",
-    "Zharkain")) %>%
-  dplyr::filter(ADM1_EN == "Akmola") %>%  # There are three rayons named Esil by Esil (Ishim) river
+    "Zharkain")) |>
+  dplyr::filter(ADM1_EN == "Akmola") |>  # There are three rayons named Esil by Esil (Ishim) river
   dplyr::bind_rows(
     get_kaz_rayons_map(ADM2_PCODE = c(
       "KZ391600",                         # Arkalyk city was a Center of Torgay Oblast
       "KZ393400",                         # Amangeldi rayon
       "KZ394200")                         # Zhangeldi rayons
       )
-  ) %>% 
+  ) |> 
   dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN))
 
 center_sf <-
@@ -372,16 +347,16 @@ center_sf <-
     LINK = c("https://en.wikipedia.org/wiki/Arkalyk"),
     LAT = c(50.24861),
     LON = c(66.91139)
-  ) %>%
+  ) |>
   sf::st_as_sf(
     coords = c("LON", "LAT"), # columns with geometry by x - "LON" and y - "LAT"
     crs = "+proj=longlat +datum=WGS84"
   )
 
 to_bb <-
-  Torgay_Region %>%
-  sf::st_bbox() %>%
-  sf::st_as_sfc() %>%
+  Torgay_Region |>
+  sf::st_bbox() |>
+  sf::st_as_sfc() |>
   sf::st_buffer(dist = 50000)
 
 tmap::tm_shape(Torgay_Region) +
@@ -426,9 +401,9 @@ See use [{tmap} & {leaflet} packages](../html/kaz_cnt1_sf.html#tmap_view) for dr
 library(ggplot2)
 library(dplyr)
 
-get_kaz_oblasts_map() %>%
-  dplyr::mutate(ADM1_EN = factor(ADM1_EN, levels = ADM1_EN)) %>%
-  ggplot2::ggplot(data = .) +
+get_kaz_oblasts_map() |>
+  dplyr::mutate(ADM1_EN = factor(ADM1_EN, levels = ADM1_EN)) |>
+  ggplot2::ggplot() +
     ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM1_EN)) +  # forcats::fct_inorder(ADM1_EN)
     ggplot2::geom_sf_text(mapping = ggplot2::aes(label = ADM1_EN)) +
     ggplot2::theme_bw() +
@@ -452,10 +427,10 @@ data(kaz_adm2_sf)
 # EPSG:4326 or WGS84 - see https://github.com/r-spatial/sf/issues/1419
 sf::st_crs(x = kaz_adm2_sf) <- 4326L
 
-kaz_adm2_sf %>%
-  dplyr::filter(ADM1_EN =="Mangystau") %>%
-  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) %>%
-  ggplot2::ggplot(data = .) +
+kaz_adm2_sf |>
+  dplyr::filter(ADM1_EN =="Mangystau") |>
+  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) |>
+  ggplot2::ggplot() +
     ggplot2::geom_sf(mapping = ggplot2::aes(fill = ADM2_EN)) +   # forcats::fct_inorder(ADM2_EN)
     ggplot2::geom_sf_text(
       mapping = ggplot2::aes(label = ADM2_EN),
@@ -493,16 +468,16 @@ sf::st_crs(x = kaz_adm2_sf) <- 4326L
 sf::st_crs(x = kaz_cnt1_sf) <- 4326L
 
 ko_bb <-
-  dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') %>%
-  sf::st_transform(crs = 2501) %>% # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
-  sf::st_bbox() %>%
-  sf::st_as_sfc() %>%
+  dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') |>
+  sf::st_transform(crs = 2501) |> # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
+  sf::st_bbox() |>
+  sf::st_as_sfc() |>
   sf::st_buffer(dist = 30000)
 
-kaz_adm2_sf %>%
-  dplyr::filter(ADM1_EN =="Kyzylorda") %>%
-  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) %>%
-  ggplot2::ggplot(data = .) +
+kaz_adm2_sf |>
+  dplyr::filter(ADM1_EN =="Kyzylorda") |>
+  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) |>
+  ggplot2::ggplot() +
     ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
       data  = sf::st_geometry(kaz_adm1_sf),
       color = "red",
@@ -575,8 +550,8 @@ You can create Interactive Maps with hyperlinks to Wikipedia articles about Kaza
       "Mangystau_Region", "Pavlodar_Region", "North_Kazakhstan_Region", "Turkistan_Region", "Ulytau Region",
       "East_Kazakhstan_Region", "Astana", "Almaty", "Shymkent")
 
-  leaflet::leaflet() %>%
-    leaflet::addProviderTiles(provider = "Esri.WorldPhysical") %>%
+  leaflet::leaflet() |>
+    leaflet::addProviderTiles(provider = "Esri.WorldPhysical") |>
     leaflet::addPolygons(
       data = sf::st_zm(kaz_adm1_sf, geometry),
       weight = 1,
@@ -588,7 +563,7 @@ You can create Interactive Maps with hyperlinks to Wikipedia articles about Kaza
                       ADM1_EN, "</a><br>", "KATO: ", KATO, "<br>", "ISO 3166-2: ", ISO_3166_2),
       label = ~paste(ADM1_EN, ":", ADM1_PCODE),
       labelOptions = labelOptions(direction = "auto")
-    ) %>%
+    ) |>
     leaflet::addCircleMarkers(
       data = kaz_cnt1_sf,
       color = "brown",

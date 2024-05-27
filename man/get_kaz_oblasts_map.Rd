@@ -112,15 +112,16 @@ tmap::qtm(Western_Region,
 South_Region <-
   get_kaz_oblasts_map(ADM1_EN = c(
     "Almaty",
-    "Almaty (city)")) \%>\%
+    "Almaty (city)")) |>
   dplyr::bind_rows(
     get_kaz_oblasts_map(ADM1_KK = c(                                             # Kazakh Language
       "\u0422\u04AF\u0440\u043A\u0456\u0441\u0442\u0430\u043D",                  # Turkestan Region
       "\u0428\u044B\u043C\u043A\u0435\u043D\u0442 (\u049B\u0430\u043B\u0430)"))  # Shymkent City
-  ) \%>\%                                                     # cat(stringi::stri_escape_unicode(x))
+  ) |>                                                     # cat(stringi::stri_escape_unicode(x))
   dplyr::bind_rows(
     get_kaz_oblasts_map(ISO_3166_2 = c(
       "KZ-ZHA",
+      "KZ-ZHT",
       "KZ-KZY"))
   )
 

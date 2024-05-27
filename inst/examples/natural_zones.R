@@ -8,19 +8,18 @@ library(tmap)
 library(dplyr)
 library(knitr)
 
-natural_zones %>%
-  dplyr::count(ZONE_EN) %>%
-  dplyr::bind_rows(., data.frame( ZONE_EN = "TOTAL", n = nrow(natural_zones))) %>%
-  knitr::kable(.,
+natural_zones |>
+  dplyr::count(ZONE_EN) |>
+  dplyr::bind_rows(data.frame( ZONE_EN = "TOTAL", n = nrow(natural_zones))) |>
+  knitr::kable(
     caption = "Administrative units level 2 by Zones according to <b>natural conditions</b>",
     format.args = list(big.mark = ' ')
   )
 
 dplyr::inner_join( x = get_kaz_rayons_map(),
                    y = natural_zones[, c("ADM2_PCODE", "ZONE_EN")],
-                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) %>%
+                   by = c("ADM2_PCODE" = "ADM2_PCODE") ) |>
   tmap::qtm(
-    shp = .,
     fill = "ZONE_EN",
     fill.title = "Zones according \nto natural conditions",
     main.title = "Zones are distinguished according to natural conditions",
@@ -42,18 +41,18 @@ Zones_EN_labels <-
     "South Siberian mountain and foothill", "Semi-desert")
 
 Zones_pallete <- c("yellowgreen", "khaki", "darkolivegreen1", "peachpuff2",
-                   "olivedrab", "navajowhite") %>%
+                   "olivedrab", "navajowhite") |>
   stats::setNames(Zones_EN_labels)
 
 natural_zones_df <-
-system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) %>%
-utils::read.csv(file = ., encoding = "UTF-8")
+system.file("extdata", "kaz_zones.csv", package = "geokz", mustWork = TRUE) |>
+utils::read.csv(encoding = "UTF-8")
 
 
 dplyr::inner_join( x = get_kaz_rayons_map(),
                  y = natural_zones_df[, c("ADM2_PCODE", "ZONE_EN")],
-                 by = c("ADM2_PCODE" = "ADM2_PCODE") ) %>%
-ggplot2::ggplot(data = .) +
+                 by = c("ADM2_PCODE" = "ADM2_PCODE") ) |>
+ggplot2::ggplot() +
   ggplot2::geom_sf(mapping = ggplot2::aes(fill = ZONE_EN)) +  # Rayons - Zones by natural conditions
   ggplot2::geom_sf(                                           # Boundaries of Kazakhstani Oblasts
     data  = sf::st_geometry(get_kaz_oblasts_map()),

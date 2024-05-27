@@ -55,8 +55,8 @@ Torgay_Region <-
   get_kaz_rayons_map(ADM2_EN = c(
     "Esil",
     "Zhaksy",
-    "Zharkain")) %>%
-  dplyr::filter(ADM1_EN == "Akmola") %>%  # There are three rayons named Esil by Esil (Ishim) river
+    "Zharkain")) |>
+  dplyr::filter(ADM1_EN == "Akmola") |>  # There are three rayons named Esil by Esil (Ishim) river
   dplyr::bind_rows(
     get_kaz_rayons_map(ADM2_PCODE = c(
       "KZ391600",                         # Arkalyk city was a Center of Torgay Oblast
@@ -72,16 +72,16 @@ center_sf <-
     LINK = c("https://en.wikipedia.org/wiki/Arkalyk"),
     LAT = c(50.24861),
     LON = c(66.91139)
-  ) %>%
+  ) |>
   sf::st_as_sf(
     coords = c("LON", "LAT"), # columns with geometry by x - "LON" and y - "LAT"
     crs = "+proj=longlat +datum=WGS84"
   )
 
 to_bb <-
-  Torgay_Region %>%
-  sf::st_bbox() %>%
-  sf::st_as_sfc() %>%
+  Torgay_Region |>
+  sf::st_bbox() |>
+  sf::st_as_sfc() |>
   sf::st_buffer(dist = 50000)
 
 tmap::tm_shape(Torgay_Region) +

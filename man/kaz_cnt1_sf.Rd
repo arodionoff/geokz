@@ -148,17 +148,17 @@ sf::st_crs(x = kaz_adm0_sf) <- 4326L
 sf::st_crs(x = kaz_adm2_sf) <- 4326L
 
 ko_bb <-
-  dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') \%>\%
+  dplyr::filter(kaz_adm1_sf, ADM1_EN == 'Kyzylorda') |>
   # Pulkovo 1942 / Gauss-Kruger CM 63E. See <https://epsg.io/2501>.
-  sf::st_transform(crs = 2501) \%>\%
-  sf::st_bbox() \%>\%
-  sf::st_as_sfc() \%>\%
+  sf::st_transform(crs = 2501) |>
+  sf::st_bbox() |>
+  sf::st_as_sfc() |>
   sf::st_buffer(dist = 30000)
 
-kaz_adm2_sf \%>\%
-  dplyr::filter(ADM1_EN =="Kyzylorda") \%>\%
-  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) \%>\%
-  ggplot2::ggplot(data = .) +
+kaz_adm2_sf |>
+  dplyr::filter(ADM1_EN =="Kyzylorda") |>
+  dplyr::mutate(ADM2_EN = factor(ADM2_EN, levels = ADM2_EN)) |>
+  ggplot2::ggplot() +
   ggplot2::geom_sf(                       # Boundaries of Kazakhstani Oblasts
     data  = sf::st_geometry(kaz_adm1_sf),
     color = "red",
@@ -231,8 +231,8 @@ urls <-
 # Basemap can be varied from a list of {leaflet} providers
 # <https://leaflet-extras.github.io/leaflet-providers/preview>.
 
-leaflet::leaflet() \%>\%
-  leaflet::addProviderTiles(provider = "Esri.WorldPhysical") \%>\%
+leaflet::leaflet() |>
+  leaflet::addProviderTiles(provider = "Esri.WorldPhysical") |>
   leaflet::addPolygons(
     data = sf::st_zm(geokz::kaz_adm1_sf, geometry),
     weight = 1,
@@ -246,7 +246,7 @@ leaflet::leaflet() \%>\%
                     "ISO 3166-2: ", ISO_3166_2),
     label = ~paste(ADM1_EN, ":", ADM1_PCODE),
     labelOptions = labelOptions(direction = "auto")
-  ) \%>\%
+  ) |>
   leaflet::addCircleMarkers(
     data = geokz::kaz_cnt1_sf,
     color = "brown",

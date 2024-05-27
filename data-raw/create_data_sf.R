@@ -92,18 +92,18 @@ kaz_adm2_2018_sf <- sf::st_read('maps/kaz_admbnda_adm2_2021.shp', agr = agr)    
 #                left = TRUE )
 kaz_adm2_2018_sf <-
   dplyr::inner_join( x = kaz_adm2_2018_sf,
-                     y = dplyr::select(kaz_adm1_2018_sf, ADM1_PCODE, ISO_3166_2, Year) %>%
-                           dplyr::filter( Year == 2018L ) %>%
+                     y = dplyr::select(kaz_adm1_2018_sf, ADM1_PCODE, ISO_3166_2, Year) |>
+                           dplyr::filter( Year == 2018L ) |>
                              sf::st_drop_geometry(),
                      by = c('ADM1_PCODE' = 'ADM1_PCODE')
-                   ) %>%
+                   ) |>
     dplyr::transmute(
       KATO       = paste0(substr(ADM2_PCODE, 3, 8), "000"),
       ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE,
       ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE,
       ADM2_EN, ADM2_KK, ADM2_RU, ADM2_PCODE,
       ISO_3166_2, Year
-    ) %>%
+    ) |>
     dplyr::arrange(KATO)  # Change order of Turkistani Cities
 
 sf::st_agr(kaz_adm2_2018_sf) <-
@@ -117,18 +117,18 @@ kaz_adm2_sf <- sf::st_read('maps/kaz_admbnda_adm2_2024.shp', agr = agr)     # Cr
 
 kaz_adm2_sf <-
   dplyr::inner_join( x = kaz_adm2_sf,
-                     y = dplyr::select(kaz_adm1_sf, ADM1_PCODE, ISO_3166_2, Year) %>%
-                       dplyr::filter( Year == 2024L ) %>%
+                     y = dplyr::select(kaz_adm1_sf, ADM1_PCODE, ISO_3166_2, Year) |>
+                       dplyr::filter( Year == 2024L ) |>
                        sf::st_drop_geometry(),
                      by = c('ADM1_PCODE' = 'ADM1_PCODE')
-  ) %>%
+  ) |>
   dplyr::transmute(
     KATO       = paste0(substr(ADM2_PCODE, 3, 8), "000"),
     ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE,
     ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE,
     ADM2_EN, ADM2_KK, ADM2_RU, ADM2_PCODE,
     ISO_3166_2, Year
-  ) %>%
+  ) |>
   dplyr::arrange(KATO)  # Change order of Turkistani Cities
 
 sf::st_agr(kaz_adm2_sf) <-
@@ -137,7 +137,7 @@ sf::st_agr(kaz_adm2_sf) <-
 
 # Correct Geometry field
 kaz_adm2_sf <-
-  kaz_adm2_sf %>%
+  kaz_adm2_sf |>
     sf::st_make_valid()                       # see https://github.com/r-spatial/sf/issues/1902
 
 usethis::use_data(kaz_adm2_sf, overwrite = TRUE, compress = 'xz', version = 3)
@@ -161,14 +161,13 @@ kaz_cnt1_sf <-
                      "KZ-KAR", "KZ-KUS", "KZ-KZY", "KZ-BAY", "KZ-MAN", "KZ-PAV", "KZ-SEV",
                      "KZ-YUZ",
                      "KZ-ULT",
-                     "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY") ) %>%
+                     "KZ-VOS", "KZ-AST", "KZ-ALA", "KZ-SHY") ) |>
   sf::st_join(
-    x = .,
     y = dplyr::select(kaz_adm1_sf, ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE,
-                      ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE, Year) %>%
+                      ADM1_EN, ADM1_KK, ADM1_RU, ADM1_PCODE, Year) |>
           dplyr::filter( Year == 2024L ),
     left = TRUE
-  ) %>%
+  ) |>
   dplyr::transmute(
     KATO,
     ADM0_EN, ADM0_KK, ADM0_RU, ADM0_PCODE,
@@ -203,7 +202,7 @@ natural_zones <-
                                     ZONE_EN = c("Steppe", "Dry-steppe", "Semi-desert",
                                                 "Foothill-desert-steppe", "Desert",
                                                 "South Siberian mountain and foothill")),
-                     by  = c("ZONE_RU" = "ZONE_RU") ) %>%
+                     by  = c("ZONE_RU" = "ZONE_RU") ) |>
     dplyr::transmute(KATO = as.character(KATO),
                      ZONE_EN = factor(ZONE_EN,
                         levels = c("Steppe", "Dry-steppe", "Foothill-desert-steppe",
