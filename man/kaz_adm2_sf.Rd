@@ -6,7 +6,7 @@
 \title{Map of All Administrative units level 2 (the district units of principal units) of Kazakhstan in 2024 Year}
 \format{
 A \code{MULTIPOLYGON} data frame (resolution: 1:1million, EPSG:4326 or WGS84 - World Geodetic System 1984) object with
-226 rows and fields:
+224 rows and fields:
 \itemize{
 \item KATO: Classifier of Administrative Territorial Objects (rus.
 \href{https://data.egov.kz/datasets/view?index=kato}{KATO})

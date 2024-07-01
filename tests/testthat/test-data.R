@@ -135,7 +135,7 @@ testthat::test_that("geokz::kaz_adm2_sf dataset for Administrative units level 2
   testthat::expect_silent(x <- sf::st_transform(x = x, crs = "EPSG:4326"))
 
   # structure of datasets...
-  testthat::expect_equal(nrow(x), 226L)
+  testthat::expect_equal(nrow(x), 224L)
   testthat::expect_equal(ncol(x), 16L)
   testthat::expect_equal(colnames(x), c("KATO",
                                         "ADM0_EN", "ADM0_KK", "ADM0_RU", "ADM0_PCODE",
@@ -176,7 +176,7 @@ testthat::test_that("geokz::kaz_adm2_sf dataset for Administrative units level 2
   testthat::expect_silent(x <- sf::st_transform(x = x, crs = "EPSG:4326"))
 
   # structure of datasets...
-  testthat::expect_equal(nrow(x), 226L)
+  testthat::expect_equal(nrow(x), 224L)
   testthat::expect_equal(ncol(x), 16L)
   testthat::expect_equal(colnames(x), c("KATO",
                                         "ADM0_EN", "ADM0_KK", "ADM0_RU", "ADM0_PCODE",

@@ -9,7 +9,7 @@ testthat::test_that("Get Rayons of Oblasts & Cities of Oblast Significance of Ka
   testthat::expect_true(is.data.frame(x))
   testthat::expect_s3_class(x, "sf")
 
-  testthat::expect_equal(nrow(x), 226L)
+  testthat::expect_equal(nrow(x), 224L)
   testthat::expect_equal(sf::st_crs(x)$input, "+proj=lcc +lon_0=67 +lat_1=45 +lat_2=51 +ellps=krass")
   testthat::expect_true(all(sf::st_is_valid(x)))
 

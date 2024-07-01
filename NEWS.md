@@ -1,3 +1,9 @@
+# geokz 1.0.2
+
+## Minor improvements
+
+* Fixed bugs in the boundaries of Alatau city & neighboring Rayons of Almaty Oblast and mistakes in texts.
+
 # geokz 1.0.1
 
 ## Major improvements
